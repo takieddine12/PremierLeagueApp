@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+         android:summary="@string/notificationoptions">
+        <CheckBoxPreference
+            android:title="@string/enablenotification"
+            android:key="notification" />
+        <CheckBoxPreference
+            android:title="@string/vibrate"
+            android:key="vibration"/>
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:summary="@string/language">
+        <CheckBoxPreference
+            android:title="@string/english"
+            android:key="english" />
+
+        <CheckBoxPreference
+            android:title="@string/spanish"
+            android:key="spanish" />
+
+        <CheckBoxPreference
+            android:title="@string/french"
+            android:key="french" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:summary="@string/rateus">
+        <Preference
+            android:title="@string/clickheretorateapp"
+            android:key="rate"/>
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>

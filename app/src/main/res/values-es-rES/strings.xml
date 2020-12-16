@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PremierLeaguePro</string>
+    <string name="clickheretorateapp">Haga clic aquí para calificar nuestra aplicación</string>
+    <string name="rateus">Nos califica</string>
+    <string name="french">" Francés"</string>
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+    <string name="language">" Idioma"</string>
+    <string name="vibrate">vibrar</string>
+    <string name="enablenotification">Habilitar  notificaciónes</string>
+    <string name="news">Noticias</string>
+    <string name="scorers">Goleadores</string>
+    <string name="live">En-Vivo</string>
+    <string name="rank">Clasificación</string>
+    <string name="match">Partido</string>
+    <string name="week">Semana</string>
+    <string name="settings">Configuraciones</string>
+    <string name="skip">Pasar</string>
+    <string name="team">Equipo</string>
+    <string name="leaguestandings">" Posiciones"</string>
+    <string name="leaguenews">" Noticias de la liga"</string>
+    <string name="leaguefixtures">" Partidos"</string>
+    <string name="leaguetopscorers">Mejores goleadores</string>
+    <string name="player">Jugador</string>
+    <string name="leaguelivescores">Resultados en vivo</string>
+    <string name="round">Ronda</string>
+    <string name="nodata">sin datos</string>
+    <string name="notificationoptions">Opciones de notificaciones</string>
+    <string name="playerAge">Edad</string>
+    <string name="playerType">Tipo</string>
+    <string name="playerMatches">Partidos</string>
+    <string name="playerYellowCards">Tarjetas amarillas</string>
+    <string name="playerRedCards">Tarjetas rojas</string>
+    <string name="playerGoals">Goles</string>
+    <string name="standingsWonMatches">Partidos ganados</string>
+    <string name="standingsDraw">Partidos sorteados</string>
+    <string name="standingsLoss">Partidos perdidos</string>
+    <string name="standingsTotal">Puntos totales</string>
+    <string name="standingsPlayed">Partidos jugados</string>
+    <string name="standingsStandingsInfo">Haga clic en el nombre del equipo para obtener más información.</string>
+    <string name="standingsGoalDifference">Diferencia de goles</string>
+    <string name="standingsInstructions">Instrucciones de clasificación</string>
+    <string name="nointernet">No hay Internet..</string>
+    <string name="updatedOn">Actualizado en:</string>
+</resources>

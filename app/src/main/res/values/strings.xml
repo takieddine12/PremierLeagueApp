@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="channelId" translatable="false">notificationId</string>
+        <string name="channelString" translatable="false">notificationString</string>
+        <string name="transitionhomeicon" translatable="false">transition home icon</string>
+        <string name="transitionawayicon" translatable="false">transition away icon</string>
+        <string name="app_name">PremierLeaguePro</string>
+        <string name="clickheretorateapp">Click here to rate our app</string>
+        <string name="rateus">Rate Us</string>
+        <string name="french">" French"</string>
+        <string name="spanish">Spanish</string>
+        <string name="english">English</string>
+        <string name="language">" Language"</string>
+        <string name="vibrate">Vibrate</string>
+        <string name="enablenotification">Enable Notification</string>
+        <string name="news">News</string>
+        <string name="scorers">Scorers</string>
+        <string name="live">Live</string>
+        <string name="rank">Ranking</string>
+        <string name="match">Match</string>
+        <string name="week">Week</string>
+        <string name="settings">Settings</string>
+        <string name="skip">Skip</string>
+        <string name="team">Club</string>
+        <string name="leaguestandings">" Standings"</string>
+        <string name="leaguenews">" League News"</string>
+        <string name="leaguefixtures">" Matches"</string>
+        <string name="leaguetopscorers">Best Scorers</string>
+        <string name="player">Player</string>
+        <string name="leaguelivescores">Live Scores</string>
+        <string name="round">Round</string>
+        <string name="nodata">No Data</string>
+        <string name="notificationoptions">Notification Options</string>
+        <string name="playerAge">Age</string>
+        <string name="playerType">Type</string>
+        <string name="playerMatches">Matches</string>
+        <string name="playerYellowCards">Yellow Cards</string>
+        <string name="playerRedCards">Red Cards</string>
+        <string name="playerGoals">Goals</string>
+        <string name="standingsWonMatches">Games Won</string>
+        <string name="standingsDraw">Games Drawn</string>
+        <string name="standingsLoss">Games Lost</string>
+        <string name="standingsTotal">Total Points</string>
+        <string name="standingsPlayed">Games Played</string>
+        <string name="standingsStandingsInfo">Click On name to get more information</string>
+        <string name="standingsGoalDifference">Goals Difference</string>
+        <string name="standingsInstructions">Standings Classification</string>
+        <string name="nointernet">No Internet..</string>
+        <string name="updatedOn">Updated On:</string>
+</resources>
