@@ -1,5 +1,6 @@
 package taki.eddine.premier.league.pro.ui.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -27,6 +29,7 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.StandingslayoutBinding
 import taki.eddine.premier.league.pro.models.BottomStandingModel
 import taki.eddine.premier.league.pro.models.Table
+import taki.eddine.premier.league.pro.services.StandingsService
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.net.URL
@@ -58,17 +61,24 @@ class StandingsFragment : Fragment() {
 
          mutableList = mutableListOf()
 
-        if(Constants.checkConnectivity(requireContext())){
+        var prefs = requireContext().getSharedPreferences("StandingsPrefs", Context.MODE_PRIVATE)
+        val isFirstTime = prefs.getBoolean("firstTime",true)
+
+        if(isFirstTime and Constants.checkConnectivity(requireContext())){
             getData()
-        }  else {
+        } else if(!isFirstTime){
             leagueViewModel.deleteDuplicateStandings()
             leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
                 it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
                 standingsAdapter = StandingsAdapter(requireActivity(), it)
                 binding.standingsrecycler.adapter = standingsAdapter
                 binding.standingProgressbar.visibility = View.INVISIBLE
+            })
+        }
 
-                    })
+        prefs.edit {
+            putBoolean("firstTime",false)
+            apply()
         }
         getClubsDetails()
     }
@@ -110,7 +120,20 @@ class StandingsFragment : Fragment() {
                                                         standingsAdapter = StandingsAdapter(requireActivity(), mutableList!!)
                                                         binding.standingsrecycler.adapter = standingsAdapter
 
-                                                        leagueViewModel.insertTableStandings(standingTable)
+                                                        Intent(requireContext(),StandingsService::class.java).apply {
+                                                            putExtra("draw",table.draw)
+                                                            putExtra("goalsAgainst",table.goalsAgainst)
+                                                            putExtra("goalsDifference",table.goalsDifference)
+                                                            putExtra("goalsFor",table.goalsFor)
+                                                            putExtra("loss",table.loss)
+                                                            putExtra("name",table.name)
+                                                            putExtra("played",table.played)
+                                                            putExtra("teamid",table.teamid)
+                                                            putExtra("total",table.total)
+                                                            putExtra("win",table.win)
+                                                            putExtra("teamXX",teamXX)
+                                                            requireContext().startService(this)
+                                                        }
                                                     }
                                                 })
                                            }

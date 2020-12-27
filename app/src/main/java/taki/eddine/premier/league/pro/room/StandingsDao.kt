@@ -8,7 +8,7 @@ import taki.eddine.premier.league.pro.models.Table
 interface StandingsDao {
 
     @Transaction
-    @Query("SELECT * FROM standingTable")
+    @Query("SELECT * FROM standingTable ORDER BY total , goalsDifference")
     fun getStandings() : LiveData<MutableList<Table>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
