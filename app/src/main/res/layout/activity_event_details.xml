@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".appui.EventDetailsActivity"
+    tools:context=".ui.appui.EventDetailsActivity"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/black"
     android:orientation="vertical">
@@ -11,7 +11,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            tools:context=".appui.EventDetailsActivity">
+            tools:context=".ui.appui.EventDetailsActivity">
 
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -63,7 +63,7 @@
                 android:id="@+id/eventdetailsround"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/whitecircle"
+                android:background="@drawable/ic_whitecircle"
                 android:gravity="center"
                 android:text="11"
                 android:textColor="@android:color/white"

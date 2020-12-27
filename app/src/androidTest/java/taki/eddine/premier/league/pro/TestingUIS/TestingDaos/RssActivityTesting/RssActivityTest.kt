@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import taki.eddine.premier.league.pro.appui.RssActivity
+import taki.eddine.premier.league.pro.ui.appui.RssActivity
 import taki.eddine.premier.league.pro.R
 
 @RunWith(AndroidJUnit4ClassRunner::class)

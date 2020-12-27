@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import taki.eddine.premier.league.pro.bottomsheetfragments.TopScorersDetailsBottomSheet
+import taki.eddine.premier.league.pro.ui.bottomsheetfragments.TopScorersDetailsBottomSheet
 import taki.eddine.premier.league.pro.Constants
 import taki.eddine.premier.league.pro.R
 import taki.eddine.premier.league.pro.databinding.TopscorersrowslayoutBinding

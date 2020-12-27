@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import taki.eddine.premier.league.pro.bottomsheetfragments.StandingsBottomDialog
+import taki.eddine.premier.league.pro.ui.bottomsheetfragments.StandingsBottomDialog
 import taki.eddine.premier.league.pro.Constants
 import taki.eddine.premier.league.pro.mvvm.LeagueViewModel
 import taki.eddine.premier.league.pro.R
@@ -21,9 +21,9 @@ import taki.eddine.premier.league.pro.uilisteners.StandingsListener
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class StandingsAdapter(var context : FragmentActivity, var mergedList : MutableList<Table>) : RecyclerView.Adapter<StandingsAdapter.StandingsViewHolder>() {
+class StandingsAdapter(var context : FragmentActivity, private var mergedList : MutableList<Table>) : RecyclerView.Adapter<StandingsAdapter.StandingsViewHolder>() {
 
-    var count = 1
+    private var count = 1
     private  var leagueViewModel: LeagueViewModel = ViewModelProvider(context)[LeagueViewModel::class.java]
     class StandingsViewHolder(var binding : StandinsrowslayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -48,13 +48,13 @@ class StandingsAdapter(var context : FragmentActivity, var mergedList : MutableL
         }
         when(count) {
             1,2,3 -> {
-                holder.binding.ranking.text = "\uD83D\uDD3A  ${count++}" + "."
+                holder.binding.ranking.text = "\uD83D\uDD3A ${count++}" + "."
             }
             18,19,20 -> {
                 holder.binding.ranking.text = "\uD83D\uDD3B ${count++}" + "."
             }
             else -> {
-                holder.binding.ranking.text = " ▶ ${count++}" + "."
+                holder.binding.ranking.text = " ▶ ${  count++}" + "."
             }
         }
 

@@ -51,7 +51,7 @@
         android:textStyle="italic"
         android:textSize="12sp"
         android:textColor="@android:color/black"
-        android:text="Update On 2020-20-24"/>
+        android:text=""/>
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

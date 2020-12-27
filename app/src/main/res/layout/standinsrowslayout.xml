@@ -26,11 +26,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="2dp"
                 android:fontFamily="@font/adamina"
-                android:textColor="@android:color/black"
                 android:gravity="center"
-                android:paddingEnd="5dp"
-                android:paddingRight="3dp"
-                android:text="2"
+                android:text="20"
+                android:textColor="@android:color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline19"
@@ -42,29 +40,30 @@
                 android:id="@+id/imageView2"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline26"
-                app:layout_constraintHorizontal_bias="0.744"
+                app:layout_constraintHorizontal_bias="0.384"
                 app:layout_constraintStart_toStartOf="@+id/guideline19"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.6"
                 app:standingslogo="@{tablemodel.teamXX.homestrTeamBadge}" />
+
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="3dp"
                 android:fontFamily="@font/adamina"
+                android:text="@{tablemodel.name}"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
-                android:text="@{tablemodel.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline20"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline26"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.666" />
 
             <TextView
                 android:id="@+id/played"
@@ -187,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp"
-                app:layout_constraintGuide_percent="0.04" />
+                app:layout_constraintGuide_percent="0.072" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline20"
@@ -203,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp"
-                app:layout_constraintGuide_percent="0.23" />
+                app:layout_constraintGuide_percent="0.2" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline27"

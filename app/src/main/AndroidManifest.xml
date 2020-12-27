@@ -17,33 +17,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".appui.ActivityOfflineNews"
+        <activity android:name="taki.eddine.premier.league.pro.ui.appui.ActivityOfflineNews"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
 
-        <activity android:name=".appui.EventDetailsActivity"
+        <activity android:name="taki.eddine.premier.league.pro.ui.appui.EventDetailsActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
         <activity
-            android:name=".appui.RssActivity"
+            android:name="taki.eddine.premier.league.pro.ui.appui.RssActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"/>
-        <activity android:name=".appui.ChangePickActivity"
+        <activity android:name="taki.eddine.premier.league.pro.ui.appui.ChangePickActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".appui.TeamPickerActivity"
+            android:name="taki.eddine.premier.league.pro.ui.appui.TeamPickerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".appui.ActivitySettings"
+            android:name="taki.eddine.premier.league.pro.ui.appui.ActivitySettings"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".appui.MainActivity"
+            android:name="taki.eddine.premier.league.pro.ui.appui.MainActivity"
             android:screenOrientation="portrait">
 
         </activity>
 
         <activity
-            android:name=".appui.LottieActivity"
+            android:name="taki.eddine.premier.league.pro.ui.appui.LottieActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,6 +65,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <service android:name=".services.NewsService"/>
+        <service android:name=".services.BestScorersService"/>
+        <service android:name=".services.LiveScoresService"/>
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

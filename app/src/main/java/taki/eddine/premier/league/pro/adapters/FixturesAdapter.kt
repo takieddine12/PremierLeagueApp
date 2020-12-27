@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import taki.eddine.premier.league.pro.appui.EventDetailsActivity
+import taki.eddine.premier.league.pro.ui.appui.EventDetailsActivity
 import taki.eddine.premier.league.pro.Constants
 import taki.eddine.premier.league.pro.R
 import taki.eddine.premier.league.pro.databinding.DaterowlayoutBinding
@@ -21,9 +21,9 @@ import taki.eddine.premier.league.pro.models.AwayLogoModel
 import taki.eddine.premier.league.pro.models.Event
 import taki.eddine.premier.league.pro.models.TeamXX
 import taki.eddine.premier.league.pro.uilisteners.RoundListener
-import taki.eddine.premier.league.pro.viewtypes.DateItem
-import taki.eddine.premier.league.pro.viewtypes.GeneralItem
-import taki.eddine.premier.league.pro.viewtypes.ListItem
+import taki.eddine.premier.league.pro.ui.viewtypes.DateItem
+import taki.eddine.premier.league.pro.ui.viewtypes.GeneralItem
+import taki.eddine.premier.league.pro.ui.viewtypes.ListItem
 
 
 @ExperimentalCoroutinesApi

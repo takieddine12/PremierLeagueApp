@@ -11,14 +11,35 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import taki.eddine.premier.league.pro.BuildConfig
+import taki.eddine.premier.league.pro.mvvm.LeagueRepository
 import taki.eddine.premier.league.pro.webauthentification.ApiResponse
 import taki.eddine.premier.league.pro.room.GlobalDatabase
+import taki.eddine.premier.league.pro.room.NewsDao
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideRepository(globalDatabase: GlobalDatabase,
+                          apiResponse: ApiResponse,
+                          @TopScorersRetrofitCall apiResponse2: ApiResponse) : LeagueRepository {
+        return LeagueRepository(
+            apiResponse,
+            globalDatabase.newsDao(),
+            globalDatabase.standingsDao(),
+            globalDatabase.fixturesDao(),
+            globalDatabase.topscorersDao(),
+            globalDatabase.livescoresDao(),
+            globalDatabase.StandingsBottomDao(),
+            apiResponse2
+        )
+    }
+
+
 
     @Provides
     @Singleton

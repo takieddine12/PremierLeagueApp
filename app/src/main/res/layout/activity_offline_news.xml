@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context=".appui.ActivityOfflineNews">
+    tools:context=".ui.appui.ActivityOfflineNews">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".appui.ActivityOfflineNews">
+            tools:context=".ui.appui.ActivityOfflineNews">
 
             <ImageView
                 android:id="@+id/bitmap"

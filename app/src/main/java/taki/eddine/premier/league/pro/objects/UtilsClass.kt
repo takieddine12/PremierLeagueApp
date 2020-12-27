@@ -17,8 +17,7 @@ object UtilsClass {
 
         val deviceFormat = SimpleDateFormat("HH:mm")
         deviceFormat.timeZone = TimeZone.getDefault() //Device timezone
-
-        return deviceFormat.format(date)
+        return deviceFormat.format(date!!)
     }
     fun convertDate(strDate : String) : String {
         val utcFormat = SimpleDateFormat("yyyy-MM-dd", Locale.UK)

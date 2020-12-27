@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
-import taki.eddine.premier.league.pro.fragments.*
+import taki.eddine.premier.league.pro.ui.fragments.*
 import taki.eddine.premier.league.pro.R
 
 @ExperimentalCoroutinesApi

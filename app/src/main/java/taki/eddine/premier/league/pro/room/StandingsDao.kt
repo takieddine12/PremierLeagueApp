@@ -14,7 +14,7 @@ interface StandingsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTable(table: Table)
 
-    @Query("DELETE FROM standingTable WHERE tableID NOT IN (SELECT MIN(id) FROM standingTable GROUP BY name, total)")
+    @Query("DELETE FROM standingTable WHERE tableID NOT IN (SELECT MIN(tableID) FROM standingTable GROUP BY name, total)")
     suspend fun deleteDuplicateStandings()
 
 

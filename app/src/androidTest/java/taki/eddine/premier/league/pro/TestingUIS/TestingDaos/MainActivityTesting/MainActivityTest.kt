@@ -19,8 +19,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import taki.eddine.premier.league.pro.appui.MainActivity
-import taki.eddine.premier.league.pro.fragments.FixturesFragment
+import taki.eddine.premier.league.pro.ui.appui.MainActivity
+import taki.eddine.premier.league.pro.ui.fragments.FixturesFragment
 import taki.eddine.premier.league.pro.R
 
 @ExperimentalCoroutinesApi
