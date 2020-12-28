@@ -26,6 +26,8 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.TopscorerslayoutBinding
 import taki.eddine.premier.league.pro.services.BestScorersService
 import taki.eddine.premier.league.pro.topscorersui.ResultMainModel
+import taki.eddine.premier.league.pro.ui.bottomsheetfragments.TopScorersDetailsBottomSheet
+import taki.eddine.premier.league.pro.uilisteners.TopScorersListener
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
@@ -68,16 +70,29 @@ class TopScorersFragment : Fragment() {
 
     }
 
-
-
-
     private fun getOfflineData(){
         leagueViewModel.deleteDuplicateBestScorers()
         leagueViewModel.observeTopScorers().observe(viewLifecycleOwner, Observer { mainResult ->
             mainResult.sortBy {
                 it.playerPlace?.toInt()
             }
-            adapter = TopScorersAdapter(requireActivity(),mainResult)
+            adapter= TopScorersAdapter(requireActivity(),list, object : TopScorersListener {
+                override fun topScorers(resultX: ResultMainModel) {
+                    if(Constants.checkConnectivity(requireContext()) && !mainResult.isNullOrEmpty()){
+                        Bundle().apply {
+                            putString("playerName",resultX.playerName)
+                            putString("icon", resultX.result?.teamLogo)
+
+                            val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
+                            topScorersBottomSheet.arguments  = this
+                            if(Constants.dialogCounter == 0){
+                                topScorersBottomSheet.show(requireActivity().supportFragmentManager,topScorersBottomSheet.tag)
+                                Constants.dialogCounter = 1
+                            }
+                        }
+                    }
+                }
+            })
             binding.topscorersrecycler.adapter = adapter
             binding.topscorersprogress.visibility = View.INVISIBLE
 
@@ -96,23 +111,33 @@ class TopScorersFragment : Fragment() {
                                 it.data?.result?.map { result->
                                     result.teamKey?.let {teamKey ->
                                         leagueViewModel.getSportApiTeamLogo(teamKey.toInt(),BuildConfig.TopScorersApi).observe(
-                                            viewLifecycleOwner, Observer {
-                                                it.data?.result?.map {
+                                            viewLifecycleOwner, Observer { netWorkResponse ->
+                                                netWorkResponse.data?.result?.map {  resultX ->
                                                     val resultModel = ResultMainModel(result.goals,result.playerKey
-                                                        ,result.playerName,result.playerPlace,result.teamKey, result.teamName,it)
+                                                        ,result.playerName,result.playerPlace,result.teamKey, result.teamName,resultX)
                                                     list.add(resultModel)
                                                     list.sortWith(compareBy { it.playerPlace?.toInt() })
-                                                    binding.topscorersrecycler.adapter = TopScorersAdapter(requireActivity(),list)
-                                                    Intent(requireContext(),BestScorersService::class.java).apply {
-                                                        putExtra("goals",result.goals)
-                                                        putExtra("playerKey",result.playerKey)
-                                                        putExtra("playerName",result.playerName)
-                                                        putExtra("playerPlace",result.playerPlace)
-                                                        putExtra("teamKey",result.teamKey)
-                                                        putExtra("teamName",result.teamName)
-                                                        putExtra("resultX",it)
-                                                        requireContext().startService(this)
-                                                    }
+                                                    binding.topscorersrecycler.adapter = TopScorersAdapter(requireActivity(),list, object : TopScorersListener {
+                                                            override fun topScorers(resultX: ResultMainModel) {
+                                                                if(Constants.checkConnectivity(requireContext()) && !netWorkResponse.data.result.isNullOrEmpty()){
+                                                                    Bundle().apply {
+                                                                        putString("playerName",resultX.playerName)
+                                                                        putString("icon", resultX.result?.teamLogo)
+
+                                                                        val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
+                                                                        topScorersBottomSheet.arguments  = this
+                                                                        if(Constants.dialogCounter == 0){
+                                                                            topScorersBottomSheet.show(requireActivity().supportFragmentManager,topScorersBottomSheet.tag)
+                                                                            Constants.dialogCounter = 1
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        })
+                                                     Intent(requireContext(),BestScorersService::class.java).apply {
+                                                         putExtra("bestScorersModel",result)
+                                                         requireContext().startService(this)
+                                                     }
                                                 }
                                             }
                                         )

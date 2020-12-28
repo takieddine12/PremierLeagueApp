@@ -29,6 +29,7 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.StandingslayoutBinding
 import taki.eddine.premier.league.pro.models.BottomStandingModel
 import taki.eddine.premier.league.pro.models.Table
+import taki.eddine.premier.league.pro.services.BottomSheetStandingsService
 import taki.eddine.premier.league.pro.services.StandingsService
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
@@ -61,12 +62,12 @@ class StandingsFragment : Fragment() {
 
          mutableList = mutableListOf()
 
-        var prefs = requireContext().getSharedPreferences("StandingsPrefs", Context.MODE_PRIVATE)
+        val prefs = requireContext().getSharedPreferences("StandingsPrefs", Context.MODE_PRIVATE)
         val isFirstTime = prefs.getBoolean("firstTime",true)
 
         if(isFirstTime and Constants.checkConnectivity(requireContext())){
             getData()
-        } else if(!isFirstTime){
+        } else {
             leagueViewModel.deleteDuplicateStandings()
             leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
                 it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
@@ -121,17 +122,7 @@ class StandingsFragment : Fragment() {
                                                         binding.standingsrecycler.adapter = standingsAdapter
 
                                                         Intent(requireContext(),StandingsService::class.java).apply {
-                                                            putExtra("draw",table.draw)
-                                                            putExtra("goalsAgainst",table.goalsAgainst)
-                                                            putExtra("goalsDifference",table.goalsDifference)
-                                                            putExtra("goalsFor",table.goalsFor)
-                                                            putExtra("loss",table.loss)
-                                                            putExtra("name",table.name)
-                                                            putExtra("played",table.played)
-                                                            putExtra("teamid",table.teamid)
-                                                            putExtra("total",table.total)
-                                                            putExtra("win",table.win)
-                                                            putExtra("teamXX",teamXX)
+                                                            putExtra("standingTable",table)
                                                             requireContext().startService(this)
                                                         }
                                                     }
@@ -184,7 +175,11 @@ class StandingsFragment : Fragment() {
                                                     byteArrayOutputStreamStadium.toByteArray(), team.strTeamBanner!!, team.strStadium!!,
                                                     team.strStadiumLocation!!, team.intStadiumCapacity!!
                                                 )
-                                              //  leagueViewModel.insertBottomStandings(bottomStandingModel)
+
+                                                Intent(requireContext(),BottomSheetStandingsService::class.java).apply {
+                                                    putExtra("bottomStandingModel",bottomStandingModel)
+                                                    requireContext().startService(this)
+                                                }
                                             }
                                         }.start()
                                     }catch (e : Exception){

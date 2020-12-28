@@ -27,15 +27,16 @@ class BestScorersService : IntentService("Debugging") {
     }
     override fun onHandleIntent(intent: Intent?) {
 
-        val goals = intent?.getStringExtra("goals")
-        val playerKey = intent?.getStringExtra("playerKey")
-        val playerName = intent?.getStringExtra("playerName")
-        val playerPlace = intent?.getStringExtra("playerPlace")
-        val teamKey = intent?.getStringExtra("teamKey")
-        val teamName = intent?.getStringExtra("teamName")
-        val resultX = intent?.getParcelableExtra<ResultX>("resultX")
+//        val goals = intent?.getStringExtra("goals")
+//        val playerKey = intent?.getStringExtra("playerKey")
+//        val playerName = intent?.getStringExtra("playerName")
+//        val playerPlace = intent?.getStringExtra("playerPlace")
+//        val teamKey = intent?.getStringExtra("teamKey")
+//        val teamName = intent?.getStringExtra("teamName")
+//        val resultX = intent?.getParcelableExtra<ResultX>("resultX")
+//        val resultModel = ResultMainModel(goals,playerKey,playerName,playerPlace,teamKey,teamName,resultX!!)
 
-        val resultModel = ResultMainModel(goals,playerKey,playerName,playerPlace,teamKey,teamName,resultX!!)
-        leagueViewModel.insertTopScorers(resultModel)
+        val resultMainModel = intent?.getParcelableExtra<ResultMainModel>("bestScorersModel")
+        leagueViewModel.insertTopScorers(resultMainModel!!)
     }
 }

@@ -17,7 +17,8 @@ import taki.eddine.premier.league.pro.uilisteners.TopScorersListener
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TopScorersAdapter(var context: FragmentActivity, var result: MutableList<ResultMainModel>) : RecyclerView.Adapter<TopScorersAdapter.ViewHolder>() {
+class TopScorersAdapter(var context: FragmentActivity, var result: MutableList<ResultMainModel>,
+var listener : TopScorersListener) : RecyclerView.Adapter<TopScorersAdapter.ViewHolder>() {
 
     class ViewHolder(var topScorersRowsLayoutBinding: TopscorersrowslayoutBinding) : RecyclerView.ViewHolder(topScorersRowsLayoutBinding.root)
 
@@ -35,23 +36,7 @@ class TopScorersAdapter(var context: FragmentActivity, var result: MutableList<R
         val list = result[position]
         holder.topScorersRowsLayoutBinding.apply {
             model = list
-            listener = object : TopScorersListener {
-                override fun topScorers(resultX: ResultMainModel) {
-                    if(Constants.checkConnectivity(context) && !result.isNullOrEmpty() ){
-                         Bundle().apply {
-                            putString("playerName",resultX.playerName)
-                            putString("icon",resultX.result.teamLogo)
-
-                                 val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
-                                 topScorersBottomSheet.arguments  = this
-                                 if(Constants.dialogCounter == 0){
-                                     topScorersBottomSheet.show((context).supportFragmentManager,topScorersBottomSheet.tag)
-                                     Constants.dialogCounter = 1
-                             }
-                         }
-                    }
-                }
-            }
+            listener = listener
         }
     }
 }

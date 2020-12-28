@@ -176,16 +176,12 @@ class NewsFragment : Fragment() {
                                     }
                                 }
                             })
+                            Intent(requireContext(),NewsService::class.java).apply {
+                                putExtra("newsModel",model)
+                                requireContext().startService(this)
+                            }
                         }
                     }
-                }
-                Intent(requireContext(),NewsService::class.java).apply {
-                    putExtra("imageUrl",imageUrl)
-                    putExtra("title",title)
-                    putExtra("description",description)
-                    putExtra("publishDate",publishDate)
-                    putExtra("link",link)
-                    requireContext().startService(this)
                 }
                 eventType = xpp.next()
             }

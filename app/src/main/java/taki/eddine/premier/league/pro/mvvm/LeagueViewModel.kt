@@ -124,7 +124,7 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
     fun observeLiveScores() : LiveData<MutableList<EventTwo>> {
         return repository.getSavedLiveScores()
     }
-    fun insertLiveScores(match : MutableList<EventTwo>) {
+    fun insertLiveScores(match : EventTwo) {
         viewModelScope.launch(Dispatchers.IO)  {
             repository.insertLiveScores(match)
         }

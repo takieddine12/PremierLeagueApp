@@ -68,6 +68,8 @@
         <service android:name=".services.NewsService"/>
         <service android:name=".services.BestScorersService"/>
         <service android:name=".services.LiveScoresService"/>
+        <service android:name=".services.StandingsService"/>
+        <service android:name=".services.BottomSheetStandingsService"/>
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

@@ -12,18 +12,55 @@ import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "StandingBottomTable",indices = [Index(value = ["bottomStandingsId"],unique = true)])
 data class BottomStandingModel (
-    var strDescriptionEN : String,
-    var strTeam : String,
+    var strDescriptionEN : String?,
+    var strTeam : String?,
     var strTeamBadge : ByteArray?,
-    var strTeamBanner : String,
-    var strStadium : String,
-    var strStadiumLocation : String,
-    var intStadiumCapacity : String
-) {
+    var strTeamBanner : String?,
+    var strStadium : String?,
+    var strStadiumLocation : String?,
+    var intStadiumCapacity : String?
+) : Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @NotNull
     var bottomStandingsId : Int?  = null
+
+    constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.createByteArray(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString()
+    ) {
+        bottomStandingsId = parcel.readValue(Int::class.java.classLoader) as? Int
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(strDescriptionEN)
+        parcel.writeString(strTeam)
+        parcel.writeByteArray(strTeamBadge)
+        parcel.writeString(strTeamBanner)
+        parcel.writeString(strStadium)
+        parcel.writeString(strStadiumLocation)
+        parcel.writeString(intStadiumCapacity)
+        parcel.writeValue(bottomStandingsId)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<BottomStandingModel> {
+        override fun createFromParcel(parcel: Parcel): BottomStandingModel {
+            return BottomStandingModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<BottomStandingModel?> {
+            return arrayOfNulls(size)
+        }
+    }
 
 
 }

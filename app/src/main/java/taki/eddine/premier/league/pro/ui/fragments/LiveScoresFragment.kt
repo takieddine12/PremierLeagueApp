@@ -93,9 +93,8 @@ class LiveScoresFragment : Fragment() {
                         binding.livescoreProgressbar.visibility = View.INVISIBLE
                         if (it.data?.events != null) {
                             it.data.events.map { match ->
-                                binding.update.text =
-                                    getString(R.string.updatedOn).plus(match.updated)
-                                if (match.strLeague.equals("English Premier League")) {
+                                binding.update.text = getString(R.string.updatedOn).plus(match.updated)
+                               // if (match.strLeague.equals("English Premier League")) {
                                     binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
                                     binding.fixturedate.text = UtilsClass.convertDate(match.dateEvent!!)
                                     val liveScores = EventTwo(
@@ -114,26 +113,15 @@ class LiveScoresFragment : Fragment() {
 
                                     mutableList?.add(liveScores)
                                     binding.livescoresrecycler.adapter = LiveScoresAdapter(requireActivity(), mutableList!!)
-
-                                    Intent(requireContext(),LiveScoresService::class.java).apply {
-                                        putExtra("strHomeTeam",match.strHomeTeam)
-                                        putExtra("strAwayTeam",match.strAwayTeam)
-                                        putExtra("strHomeTeamBadge", match.strHomeTeamBadge)
-                                        putExtra("strAwayTeamBadge", match.strAwayTeamBadge)
-                                        putExtra("intHomeScore",match.intHomeScore)
-                                        putExtra("intAwayScore", match.intAwayScore)
-                                        putExtra("strProgress", match.strProgress)
-                                        putExtra("strEventTime",UtilsClass.convertHour(match.strEventTime!!))
-                                        putExtra("dateEvent",UtilsClass.convertDate(match.dateEvent!!))
-                                        putExtra("updated",UtilsClass.convertUpdatedDate(match.updated!!))
-                                        putExtra("strLeague",match.strLeague)
-                                        requireContext().startService(this)
-                                    }
+                                     Intent(requireContext(),LiveScoresService::class.java).apply {
+                                         putExtra("liveScorersModel",liveScores)
+                                         requireContext().startService(this)
+                                     }
                                 }
-                                else {
+                               // else {
                                     getSavedLiveScores()
-                                }
-                            }
+                               // }
+                            //}
                         } else {
                             getSavedLiveScores()
                             binding.liveScoresNoDataSvg.visibility = View.VISIBLE

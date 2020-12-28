@@ -17,7 +17,6 @@ interface ApiResponse {
     @GET("v1/json/4013070/search_all_teams.php?")
     suspend fun getClubDetails(@Query("l") league : String) : StandingClubModel
     //----
-    //TODO: API REQUEST MADE FROM https://allsportsapi.com/
     @GET("football/?&met=Topscorers")
     suspend fun getTopScorers(@Query("leagueId") leagueid : Int, @Query("APIkey") apiKey : String) : TopScorersModl
 

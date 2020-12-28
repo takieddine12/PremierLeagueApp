@@ -41,20 +41,8 @@ class NewsService() : IntentService("Debugging") {
 
     override fun onHandleIntent(intent: Intent?) {
         if(Constants.checkConnectivity(this)){
-
-            imageUrl = intent?.getStringExtra("imageUrl")
-            title = intent?.getStringExtra("title")
-            description = intent?.getStringExtra("description")
-            publishDate = intent?.getStringExtra("publishDate")
-            link = intent?.getStringExtra("link")
-
-            imageUrl?.let {
-                val url = URL(it)
-                val bitmap = BitmapFactory.decodeStream(getInputStream(url))
-                val model = NewsModel(bitmap, title, description, publishDate!!, link!!)
-                leagueViewModel.insertNews(model)
-            }
-
+             val model = intent?.getParcelableExtra<NewsModel>("newsModel")
+            leagueViewModel.insertNews(model!!)
         }
     }
 
