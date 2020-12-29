@@ -4,10 +4,9 @@ package taki.eddine.premier.league.pro.livescoresdata
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-@Entity(tableName = "liveScoresTable",indices = [Index(value = ["matchID"],unique = true)])
+@Entity(tableName = "liveScoresTable")
 data class EventTwo(
     @SerializedName("strHomeTeam")
     var strHomeTeam : String?,
@@ -51,12 +50,23 @@ data class EventTwo(
         matchID = parcel.readValue(Int::class.java.classLoader) as? Int
     }
 
-    override fun describeContents(): Int {
-        return describeContents()
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(strHomeTeam)
+        parcel.writeString(strAwayTeam)
+        parcel.writeString(strHomeTeamBadge)
+        parcel.writeString(strAwayTeamBadge)
+        parcel.writeValue(intHomeScore)
+        parcel.writeValue(intAwayScore)
+        parcel.writeString(strProgress)
+        parcel.writeString(strEventTime)
+        parcel.writeString(dateEvent)
+        parcel.writeString(updated)
+        parcel.writeString(strLeague)
+        parcel.writeValue(matchID)
     }
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-
+    override fun describeContents(): Int {
+        return 0
     }
 
     companion object CREATOR : Parcelable.Creator<EventTwo> {
@@ -68,4 +78,6 @@ data class EventTwo(
             return arrayOfNulls(size)
         }
     }
+
+
 }

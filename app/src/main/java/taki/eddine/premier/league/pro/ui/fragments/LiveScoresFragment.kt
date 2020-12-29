@@ -26,6 +26,7 @@ import taki.eddine.premier.league.pro.databinding.LivescoreslayoutBinding
 import taki.eddine.premier.league.pro.livescoresdata.EventTwo
 import taki.eddine.premier.league.pro.objects.UtilsClass
 import taki.eddine.premier.league.pro.services.LiveScoresService
+import timber.log.Timber
 
 
 @ExperimentalCoroutinesApi
@@ -54,7 +55,7 @@ class LiveScoresFragment : Fragment() {
         val isFirstTime = prefs.getBoolean("firstTime",true)
         if(isFirstTime and Constants.checkConnectivity(requireContext())){
             getData()
-        } else if(!isFirstTime) {
+        } else  {
             getSavedLiveScores()
         }
 
@@ -67,18 +68,22 @@ class LiveScoresFragment : Fragment() {
     }
     private fun getSavedLiveScores() {
         leagueViewModel.deleteDuplicateLiveScores()
-        leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer {
-           if(it == null){
-               binding.liveScoresNoDataSvg.visibility = View.VISIBLE
-               binding.livescoreProgressbar.visibility = View.INVISIBLE
-           }  else {
-               binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
-               binding.livescoreProgressbar.visibility = View.INVISIBLE
-               it.map {
-                   binding.fixturedate.text = it.dateEvent
-               }
-               binding.livescoresrecycler.adapter = LiveScoresAdapter(requireContext(),it)
-           }
+        leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer { eventTwo ->
+
+
+            if(eventTwo.isNullOrEmpty()){
+                binding.liveScoresNoDataSvg.visibility = View.VISIBLE
+                binding.livescoreProgressbar.visibility = View.INVISIBLE
+            }  else {
+                binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
+                binding.livescoreProgressbar.visibility = View.INVISIBLE
+                eventTwo.map {
+                    binding.fixturedate.text = it.dateEvent
+                    binding.update.text = getString(R.string.updatedOn).plus(it.updated)
+                }
+                binding.livescoresrecycler.adapter = LiveScoresAdapter(requireContext(),eventTwo)
+
+            }
         })
     }
     private fun getData() {
@@ -114,14 +119,10 @@ class LiveScoresFragment : Fragment() {
                                     mutableList?.add(liveScores)
                                     binding.livescoresrecycler.adapter = LiveScoresAdapter(requireActivity(), mutableList!!)
                                      Intent(requireContext(),LiveScoresService::class.java).apply {
-                                         putExtra("liveScorersModel",liveScores)
+                                         putExtra("liveScoresModel",liveScores)
                                          requireContext().startService(this)
                                      }
                                 }
-                               // else {
-                                    getSavedLiveScores()
-                               // }
-                            //}
                         } else {
                             getSavedLiveScores()
                             binding.liveScoresNoDataSvg.visibility = View.VISIBLE

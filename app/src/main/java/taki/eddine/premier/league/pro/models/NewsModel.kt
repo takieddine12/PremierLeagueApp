@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
 
-@Entity(tableName = "NewsTable",indices = [Index(value = ["newsID"],unique = true)])
+@Entity(tableName = "NewsTable")
 data class NewsModel(
 
      var newsBanner: Bitmap?,

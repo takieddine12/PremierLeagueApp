@@ -9,7 +9,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "resultTable",indices = [Index(value = ["resultID"],unique = true)])
+@Entity(tableName = "resultTable")
 data class ResultMainModel(
     @SerializedName("goals")
     val goals: String?,

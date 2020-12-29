@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
 import dagger.Provides
 import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "StandingBottomTable",indices = [Index(value = ["bottomStandingsId"],unique = true)])
+@Entity(tableName = "StandingBottomTable")
 data class BottomStandingModel (
     var strDescriptionEN : String?,
     var strTeam : String?,

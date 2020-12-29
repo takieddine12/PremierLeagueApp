@@ -7,7 +7,7 @@ import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
 
-@Entity(tableName = "standingTable",indices = [Index(value = ["tableID"],unique = true)])
+@Entity(tableName = "standingTable")
 class Table(
 
     @SerializedName("draw")

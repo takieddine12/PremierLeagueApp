@@ -148,7 +148,8 @@ class FixturesFragment : Fragment() {
                                                                         event.strHomeTeam,
                                                                         event.strHomeYellowCards,
                                                                         UtilsClass.convertDate(event.dateEvent!!),
-                                                                        UtilsClass.convertHour(event.strTime)
+                                                                        UtilsClass.convertHour(event.strTime!!),
+                                                                        event.strPostponed
                                                                     )
                                                                     fixture.matchRound = round
 

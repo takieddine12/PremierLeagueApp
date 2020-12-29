@@ -10,6 +10,7 @@ import taki.eddine.premier.league.pro.livescoresdata.EventTwo
 import taki.eddine.premier.league.pro.mvvm.LeagueRepository
 import taki.eddine.premier.league.pro.mvvm.LeagueViewModel
 import taki.eddine.premier.league.pro.objects.UtilsClass
+import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -40,10 +41,15 @@ class LiveScoresService : IntentService("Debugging") {
 //        val updated = intent?.getStringExtra("updated")
 //        val strLeague = intent?.getStringExtra("strLeague")
 //
-//        val liveScores = EventTwo(
-//           strHomeTeam,strAwayTeam,strHomeTeamBadge,strAwayTeamBadge,intHomeScore,intAwayScore,strProgress,
-//            strEventTime,dateEvent,updated,strLeague)
+//        val liveScorersModel = EventTwo(
+//            strHomeTeam,strAwayTeam,strHomeTeamBadge,
+//            strAwayTeamBadge,intHomeScore,intAwayScore,
+//            strProgress,strEventTime,dateEvent,updated,strLeague
+//        )
         val liveScorersModel = intent?.getParcelableExtra<EventTwo>("liveScorersModel")
-        leagueViewModel.insertLiveScores(liveScorersModel!!)
+        liveScorersModel?.let {
+            leagueViewModel.insertLiveScores(mutableListOf(it))
+        }
+
     }
 }

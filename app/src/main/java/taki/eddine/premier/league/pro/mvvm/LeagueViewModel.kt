@@ -79,7 +79,7 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
             }
     }
     suspend fun getStandingsTeamsDetails(id : Int) : LiveData<NetworkStatesHandler<StandingsTeamsDetailsModel>>{
-        return repository.getStandignsTeamDetails(id)
+        return repository.getStandingsTeamsDetails(id)
             .buffer()
             .asLiveData()
 
@@ -124,7 +124,7 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
     fun observeLiveScores() : LiveData<MutableList<EventTwo>> {
         return repository.getSavedLiveScores()
     }
-    fun insertLiveScores(match : EventTwo) {
+    fun insertLiveScores(match : MutableList<EventTwo>) {
         viewModelScope.launch(Dispatchers.IO)  {
             repository.insertLiveScores(match)
         }

@@ -9,10 +9,10 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "eventTable",indices = [Index(value = ["fixturesID"],unique = true)])
+@Entity(tableName = "eventTable")
 data class Event(
-    @Embedded val teamXX: TeamXX,
-    @Embedded  val awayLogo : AwayLogoModel,
+    @Embedded val teamXX: TeamXX?,
+    @Embedded  val awayLogo : AwayLogoModel?,
     @SerializedName("idAwayTeam")
     val idAwayTeam: String?,
     @SerializedName("idEvent")
@@ -44,7 +44,9 @@ data class Event(
     @SerializedName("dateEvent")
     val dateEvent : String?,
     @SerializedName("strTime")
-    val strTime : String
+    val strTime : String?,
+    @SerializedName("strPostponed")
+    var strPostponed : String?
 
 
 ) : Parcelable {
@@ -54,8 +56,8 @@ data class Event(
     var matchRound: Int? = null
 
     constructor(parcel: Parcel) : this(
-        parcel.readParcelable(TeamXX::class.java.classLoader)!!,
-        parcel.readParcelable(AwayLogoModel::class.java.classLoader)!!,
+        parcel.readParcelable(TeamXX::class.java.classLoader),
+        parcel.readParcelable(AwayLogoModel::class.java.classLoader),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -71,7 +73,8 @@ data class Event(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()!!
+        parcel.readString(),
+        parcel.readString()
     ) {
         fixturesID = parcel.readValue(Int::class.java.classLoader) as? Int
         matchRound = parcel.readValue(Int::class.java.classLoader) as? Int
@@ -96,6 +99,7 @@ data class Event(
         parcel.writeString(strHomeYellowCards)
         parcel.writeString(dateEvent)
         parcel.writeString(strTime)
+        parcel.writeString(strPostponed)
         parcel.writeValue(fixturesID)
         parcel.writeValue(matchRound)
     }
@@ -113,7 +117,6 @@ data class Event(
             return arrayOfNulls(size)
         }
     }
-
 
 }
 

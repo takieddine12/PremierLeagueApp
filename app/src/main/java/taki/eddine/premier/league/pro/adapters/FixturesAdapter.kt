@@ -61,6 +61,10 @@ class FixturesAdapter  constructor(var context: FragmentActivity, var fixturesLi
             ListItem.TYPE_GENERAL ->{
                 val generalValues = list as GeneralItem
                 val dataViewHolder = holder as DataHolder
+
+                if(generalValues.getPojoOfJsonArray()?.strPostponed == "yes"){
+                    generalValues.getPojoOfJsonArray()!!.strPostponed = "Scheduled"
+                }
                 dataViewHolder.fixturesRowsLayoutBinding.fixturesmodel = generalValues.getPojoOfJsonArray()
                  dataViewHolder.fixturesRowsLayoutBinding.roundlistene = object  : RoundListener{
                      override fun getRound(event: Event, teamXX: TeamXX, awayLogoModel: AwayLogoModel) {
@@ -90,6 +94,8 @@ class FixturesAdapter  constructor(var context: FragmentActivity, var fixturesLi
                          }
                      }
                  }
+
+
             }
             ListItem.TYPE_DATE -> {
                 val dateTimeValues = list as DateItem
@@ -97,6 +103,7 @@ class FixturesAdapter  constructor(var context: FragmentActivity, var fixturesLi
                 dateViewHolder.dateRowLayoutBinding.dateEvent = dateTimeValues.getDate()
             }
         }
+
     }
     override fun getItemViewType(position: Int): Int {
         return fixturesList[position].getType()

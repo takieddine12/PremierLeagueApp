@@ -55,16 +55,16 @@ class TopScorersFragment : Fragment() {
         list = mutableListOf()
 
         val prefs = requireContext().getSharedPreferences("bestScorersPrefs", Context.MODE_PRIVATE)
-        val isFirstTime = prefs.getBoolean("firstTime",true)
-        if(isFirstTime and Constants.checkConnectivity(requireContext())){
+        val isFirstTime = prefs.getBoolean("firstTime", true)
+        if (isFirstTime and Constants.checkConnectivity(requireContext())) {
             getTopScorersData()
-        } else if(!isFirstTime) {
+        } else if (!isFirstTime) {
             getOfflineData()
         }
 
         val editor = prefs.edit()
         editor.apply {
-            putBoolean("firstTime",false)
+            putBoolean("firstTime", false)
             apply()
         }
 
@@ -73,10 +73,11 @@ class TopScorersFragment : Fragment() {
     private fun getOfflineData(){
         leagueViewModel.deleteDuplicateBestScorers()
         leagueViewModel.observeTopScorers().observe(viewLifecycleOwner, Observer { mainResult ->
+
             mainResult.sortBy {
                 it.playerPlace?.toInt()
             }
-            adapter= TopScorersAdapter(requireActivity(),list, object : TopScorersListener {
+            adapter= TopScorersAdapter(requireActivity(),mainResult, object : TopScorersListener {
                 override fun topScorers(resultX: ResultMainModel) {
                     if(Constants.checkConnectivity(requireContext()) && !mainResult.isNullOrEmpty()){
                         Bundle().apply {
@@ -121,9 +122,9 @@ class TopScorersFragment : Fragment() {
                                                             override fun topScorers(resultX: ResultMainModel) {
                                                                 if(Constants.checkConnectivity(requireContext()) && !netWorkResponse.data.result.isNullOrEmpty()){
                                                                     Bundle().apply {
+
                                                                         putString("playerName",resultX.playerName)
                                                                         putString("icon", resultX.result?.teamLogo)
-
                                                                         val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
                                                                         topScorersBottomSheet.arguments  = this
                                                                         if(Constants.dialogCounter == 0){
