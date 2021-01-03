@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         getLanguagePreference()
         setSupportActionBar(binding.toolbar)
 
-        binding.toolbarTitle.text = getString(R.string.leaguefixtures)
+        supportActionBar?.title = getString(R.string.leaguefixtures)
 
         setUi()
         getCurrentRound()
@@ -56,50 +56,97 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUi() {
         pagerAdapter = PagerAdapter(supportFragmentManager, this)
-        binding.viewPager.adapter = pagerAdapter
-        binding.viewPager.offscreenPageLimit = 5
-        binding.bubbleTabBar.setupBubbleTabBar(binding.viewPager)
-        binding.bubbleTabBar.setSelected(0, false)
-        binding.bubbleTabBar.addBubbleListener(object : OnBubbleClickListener {
-            override fun onBubbleClick(id: Int) {
-                when (id) {
-                    R.id.fixtures -> {
-                        binding.viewPager.currentItem = 0
-                        binding.toolbarTitle.text = getString(R.string.leaguefixtures)
-                    }
-                    R.id.standings -> {
-                        binding.viewPager.currentItem = 1
-                        binding.toolbarTitle.text = getString(R.string.leaguestandings)
-                    }
-                    R.id.livescores -> {
-                        binding.viewPager.currentItem = 2
-                        binding.toolbarTitle.text = getString(R.string.leaguelivescores)
-                    }
-                    R.id.topscorers -> {
-                        binding.viewPager.currentItem = 3
-                        binding.toolbarTitle.text = getString(R.string.leaguetopscorers)
-                    }
-                    R.id.news -> {
-                        binding.viewPager.currentItem = 4
-                        binding.toolbarTitle.text = getString(R.string.leaguenews)
+        binding.apply {
+            viewPager.adapter = pagerAdapter
+            viewPager.offscreenPageLimit = 5
+            bubbleTabBar.setupBubbleTabBar(binding.viewPager)
+            bubbleTabBar.setSelected(0, false)
+            bubbleTabBar.addBubbleListener(object : OnBubbleClickListener {
+                override fun onBubbleClick(id: Int) {
+                    when (id) {
+                        R.id.fixtures -> {
+                            binding.viewPager.currentItem = 0
+                            supportActionBar?.title = getString(R.string.leaguefixtures)
+                        }
+                        R.id.standings -> {
+                            binding.viewPager.currentItem = 1
+                            supportActionBar?.title = getString(R.string.leaguestandings)
+                        }
+                        R.id.livescores -> {
+                            binding.viewPager.currentItem = 2
+                            supportActionBar?.title = getString(R.string.leaguelivescores)
+                        }
+                        R.id.topscorers -> {
+                            binding.viewPager.currentItem = 3
+                            supportActionBar?.title = getString(R.string.leaguetopscorers)
+                        }
+                        R.id.news -> {
+                            binding.viewPager.currentItem = 4
+                            supportActionBar?.title = getString(R.string.leaguenews)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
-    private fun getLanguagePreference(){
-        val languagesSharedPreference  = getSharedPreferences("languagesPrefs",Context.MODE_PRIVATE)
-        val language = languagesSharedPreference.getString("language","en")
-        val code = languagesSharedPreference.getString("code","en-EN")
 
-        val locale = Locale(language!!,code!!)
-        val configuration =  resources.configuration
+    private fun getLanguagePreference() {
+        val languagesSharedPreference = getSharedPreferences("languagesPrefs", Context.MODE_PRIVATE)
+        val language = languagesSharedPreference.getString("language", "en")
+        val code = languagesSharedPreference.getString("code", "en-EN")
+
+        val locale = Locale(language!!, code!!)
+        val configuration = resources.configuration
         val displayMetrics = resources.displayMetrics
         configuration.setLocale(locale)
-        resources.updateConfiguration(configuration,displayMetrics)
+        resources.updateConfiguration(configuration, displayMetrics)
 
     }
-    private fun getCurrentRound()  { lifecycleScope.launch {
+
+    private fun getCurrentRound() {
+        lifecycleScope.launch {
+            val fixturesPrefs = getSharedPreferences("fixturesPrefs", Context.MODE_PRIVATE)
+            val fixturesPrefsEditor = fixturesPrefs.edit()
+            if (Constants.checkConnectivity(this@MainActivity)) {
+                leagueViewModel.getCurrentRound(4328, "2020-2021")
+                    .observe(this@MainActivity, androidx.lifecycle.Observer {
+                        if (!it.events.isNullOrEmpty()) {
+                            val deviceDate = Calendar.getInstance().time
+                            val simpleDateFormat =
+                                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            val formattedDate = simpleDateFormat.format(deviceDate)
+                            for (i in it.events.indices) {
+                                val gameDate = it.events[i].dateEvent
+                                if (gameDate.equals(formattedDate, true)) {
+                                    val currentRound = it.events[i].intRound?.toInt()
+                                    fixturesPrefsEditor.putInt("currentRound", currentRound!!)
+                                    fixturesPrefsEditor.apply()
+
+                                    /*
+                                    else {
+                                    val currentRound = it.events[i].intRound?.takeLast(i)?.toInt()
+                                    fixturesPrefsEditor.putInt("currentRound", currentRound!!)
+                                    fixturesPrefsEditor.apply()
+                                }
+                                     */
+                                }
+                            }
+                        } else {
+                            Timber.d("No Internet Connection")
+                        }
+                    })
+            }
+
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
+    }
+}
+ /*
+   private fun getCurrentRound()  { lifecycleScope.launch {
             val dataStore = createDataStore(name = "fixturesPrefs")
             if(Constants.checkConnectivity(this@MainActivity)){
                 leagueViewModel.getCurrentRound(4328, "2020-2021")
@@ -135,8 +182,4 @@ class MainActivity : AppCompatActivity() {
             }
 
         } }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        moveTaskToBack(true)
-    }
-}
+  */

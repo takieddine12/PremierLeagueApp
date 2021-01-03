@@ -16,7 +16,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:elevation="16dp">
+        app:cardElevation="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fixturescontraintlayout"
@@ -103,16 +103,14 @@
                 app:layout_constraintVertical_bias="0.323" />
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="23dp"
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:scaleType="center"
-                android:src="@drawable/vscard"
-                android:text="VS"
+                android:src="@drawable/ic_versus_vs"
                 android:textColor="@android:color/white"
-                android:textSize="11sp"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
                 app:layout_constraintHorizontal_bias="0.0"

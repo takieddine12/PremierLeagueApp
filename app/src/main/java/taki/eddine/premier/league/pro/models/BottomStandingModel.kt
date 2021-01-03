@@ -16,7 +16,7 @@ data class BottomStandingModel (
     var strTeam : String?,
     var strTeamBadge : ByteArray?,
     var strTeamBanner : String?,
-    var strStadium : String?,
+    var strStadium : ByteArray?,
     var strStadiumLocation : String?,
     var intStadiumCapacity : String?
 ) : Parcelable {
@@ -30,7 +30,7 @@ data class BottomStandingModel (
         parcel.readString(),
         parcel.createByteArray(),
         parcel.readString(),
-        parcel.readString(),
+        parcel.createByteArray(),
         parcel.readString(),
         parcel.readString()
     ) {
@@ -42,7 +42,7 @@ data class BottomStandingModel (
         parcel.writeString(strTeam)
         parcel.writeByteArray(strTeamBadge)
         parcel.writeString(strTeamBanner)
-        parcel.writeString(strStadium)
+        parcel.writeByteArray(strStadium)
         parcel.writeString(strStadiumLocation)
         parcel.writeString(intStadiumCapacity)
         parcel.writeValue(bottomStandingsId)

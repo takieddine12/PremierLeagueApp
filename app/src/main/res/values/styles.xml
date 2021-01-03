@@ -19,7 +19,6 @@
     <style name="CustomBottom" parent="Widget.MaterialComponents.BottomSheet">
         <item name="shapeAppearanceOverlay">@style/Bottom</item>
     </style>
-
     <style name="Bottom" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">14dp</item>
@@ -28,12 +27,16 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    //BottomSheetDialog Animation
+    // TODO : BottomSheetDialog Animation
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
         <item name="android:windowExitAnimation">@anim/slide_down_dialog</item>
     </style>
 
 
+    // TODO : Toolbar Title Font
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:fontFamily">@font/adamina</item>
+    </style>
 
 </resources>

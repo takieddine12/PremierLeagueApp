@@ -78,7 +78,7 @@ class StandingsAdapter(var context : FragmentActivity, private var mergedList : 
                                 bundle.putString("team",it.strTeam)
                                 bundle.putByteArray("teamBadge",it.strTeamBadge)
                                 bundle.putString("teambanner",it.strTeamBanner)
-                                bundle.putString("stadium",it.strStadium)
+                                bundle.putByteArray("stadium",it.strStadium)
                                 bundle.putString("stadiumLocation",it.strStadiumLocation)
                                 bundle.putString("stadiumCapacity",it.intStadiumCapacity)
                                 val dialog = StandingsBottomDialog()

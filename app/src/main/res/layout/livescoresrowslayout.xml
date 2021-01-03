@@ -72,15 +72,14 @@
                 android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:scaleType="center"
-                android:src="@drawable/vscard"
-                android:textColor="@android:color/white"
-                android:textSize="11sp"
+                android:src="@drawable/ic_versus_vs"
                 app:layout_constraintBottom_toTopOf="@+id/guideline9"
                 app:layout_constraintEnd_toStartOf="@+id/guideline12"
                 app:layout_constraintHorizontal_bias="0.463"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.814" />
+                app:layout_constraintVertical_bias="0.814"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/livehomescore"

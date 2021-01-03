@@ -60,12 +60,12 @@ class StandingsFragment : Fragment() {
         binding.standingsrecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.standingsrecycler.setHasFixedSize(true)
 
-         mutableList = mutableListOf()
+        mutableList = mutableListOf()
 
         val prefs = requireContext().getSharedPreferences("StandingsPrefs", Context.MODE_PRIVATE)
         val isFirstTime = prefs.getBoolean("firstTime",true)
 
-        if(isFirstTime and Constants.checkConnectivity(requireContext())){
+        if(Constants.checkConnectivity(requireContext())){
             getData()
         } else {
             leagueViewModel.deleteDuplicateStandings()
@@ -127,8 +127,8 @@ class StandingsFragment : Fragment() {
                                                         }
                                                     }
                                                 })
-                                           }
-                                      }
+                                    }
+                                }
 
                                 binding.standingProgressbar.visibility = View.INVISIBLE
                             }
@@ -159,20 +159,35 @@ class StandingsFragment : Fragment() {
                             if (!it.data?.teams.isNullOrEmpty()) {
                                 it.data?.teams?.map { team ->
                                     val url = URL(team.strTeamBadge)
+                                    val LogoUrl = URL(team.strStadiumThumb)
+                                    getTeamLogo(team.strTeam!!)
                                     try {
                                         Thread{
 
+                                            // TODO : Stadium Thumb
+                                            val httpURLConnectionTeam = LogoUrl.openConnection() as HttpsURLConnection
+                                            httpURLConnectionTeam.connect()
+                                            httpURLConnectionTeam.readTimeout = 60
+                                            val inputStreamTeam = httpURLConnectionTeam.inputStream
+                                            val byteArrayStadium = ByteArrayOutputStream()
+                                            val teamLogoBitmap = BitmapFactory.decodeStream(inputStreamTeam)
+                                            teamLogoBitmap.compress(Bitmap.CompressFormat.PNG, 100,byteArrayStadium)
+
+                                            // TODO StrTeam Badge
                                             val httpsURLConnectionTeam = url.openConnection() as HttpsURLConnection
                                             httpsURLConnectionTeam.connect()
+                                            httpsURLConnectionTeam.readTimeout  = 60
                                             val inputStreamStadium = httpsURLConnectionTeam.inputStream
-                                            val byteArrayOutputStreamStadium = ByteArrayOutputStream()
+                                            val byteArrayTeamBadge = ByteArrayOutputStream()
                                             val stadiumBitmap = BitmapFactory.decodeStream(inputStreamStadium)
-                                            stadiumBitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStreamStadium)
+                                            stadiumBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayTeamBadge)
 
                                             requireActivity().runOnUiThread {
+
                                                 val bottomStandingModel = BottomStandingModel(
-                                                    team.strDescriptionEN!!, team.strTeam!!,
-                                                    byteArrayOutputStreamStadium.toByteArray(), team.strTeamBanner!!, team.strStadium!!,
+                                                    team.strDescriptionEN!!, team.strTeam,
+                                                    byteArrayTeamBadge.toByteArray(),
+                                                    team.strTeamBanner!!, byteArrayStadium.toByteArray(),
                                                     team.strStadiumLocation!!, team.intStadiumCapacity!!
                                                 )
 
@@ -196,25 +211,18 @@ class StandingsFragment : Fragment() {
                 })
         }
     }
-    private fun TeamLogo(team : String) : ByteArrayOutputStream {
+    private fun getTeamLogo(team : String) : ByteArrayOutputStream {
         val url = URL(team)
         val byteArrayOutputStream = ByteArrayOutputStream()
-        Handler().postDelayed(Runnable {
-            try {
-                Thread{
-                    val httpURLConnectionTeam = url.openConnection() as HttpsURLConnection
-                    httpURLConnectionTeam.connect()
-                    val inputStreamTeam = httpURLConnectionTeam.inputStream
-                    val teamLogoBitmap = BitmapFactory.decodeStream(inputStreamTeam)
-                    teamLogoBitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream)
-                }.start()
-            }catch (e : Exception){
-                Timber.d("HttpUrlConnection Exception ${e.message}")
-            }
-        },7000)
+        try {
+            Thread{
+
+            }.start()
+        }catch (e : Exception){
+            Timber.d("HttpUrlConnection Exception ${e.message}")
+        }
         return byteArrayOutputStream
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

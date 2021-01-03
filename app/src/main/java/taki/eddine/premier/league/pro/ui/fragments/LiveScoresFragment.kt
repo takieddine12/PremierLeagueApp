@@ -53,7 +53,7 @@ class LiveScoresFragment : Fragment() {
 
         val prefs = requireContext().getSharedPreferences("LiveScoresPrefs", Context.MODE_PRIVATE)
         val isFirstTime = prefs.getBoolean("firstTime",true)
-        if(isFirstTime and Constants.checkConnectivity(requireContext())){
+        if(Constants.checkConnectivity(requireContext())){
             getData()
         } else  {
             getSavedLiveScores()

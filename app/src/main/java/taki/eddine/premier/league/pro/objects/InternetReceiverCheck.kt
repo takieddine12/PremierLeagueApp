@@ -14,8 +14,10 @@ class InternetReceiverCheck(var context: Context) : LiveData<Boolean>(){
 
     override fun onActive() {
         super.onActive()
-        var intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        context.registerReceiver(internetReceiver,intentFilter)
+        IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+            context.registerReceiver(internetReceiver,this)
+        }
+
     }
 
     override fun onInactive() {
@@ -24,15 +26,15 @@ class InternetReceiverCheck(var context: Context) : LiveData<Boolean>(){
     }
 
 
-     var internetReceiver = object : BroadcastReceiver(){
+     private val internetReceiver = object : BroadcastReceiver(){
          override fun peekService(myContext: Context?, service: Intent?): IBinder {
              return super.peekService(myContext, service)
          }
 
          override fun onReceive(context: Context?, intent: Intent?) {
              intent?.let {
-                 var networkInfo = it.extras?.get(ConnectivityManager.EXTRA_NETWORK_INFO) as NetworkInfo
-                 var isConnected = networkInfo != null && networkInfo.isConnected
+                 val networkInfo = it.extras?.get(ConnectivityManager.EXTRA_NETWORK_INFO) as NetworkInfo
+                 val isConnected = networkInfo.isConnected
                  if(isConnected){
                      when(networkInfo.type){
                          ConnectivityManager.TYPE_WIFI ->{
@@ -48,7 +50,6 @@ class InternetReceiverCheck(var context: Context) : LiveData<Boolean>(){
                  } else {
                     postValue(false)
                  }
-
              }
          }
      }

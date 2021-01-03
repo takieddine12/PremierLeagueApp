@@ -17,6 +17,7 @@ import taki.eddine.premier.league.pro.mvvm.LeagueViewModel
 import taki.eddine.premier.league.pro.webauthentification.NetworkStatesHandler
 import taki.eddine.premier.league.pro.Constants
 import taki.eddine.premier.league.pro.databinding.TopscorersbottomsheetlayoutBinding
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -32,9 +33,14 @@ class TopScorersDetailsBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if(Constants.checkConnectivity(requireContext())){
+
             val  playerName = arguments?.getString("playerName")?.replace(".","")
             val icon = arguments?.getString("icon")
+
+            Timber.d("Dialog PlayerName is $playerName")
+            Timber.d("Diallog Icon is $icon")
             lifecycleScope.launch {
                 leagueViewModel.getPlayerDetails(playerName!!,BuildConfig.TopScorersApi).observe(viewLifecycleOwner, Observer {
                     when(it.status){

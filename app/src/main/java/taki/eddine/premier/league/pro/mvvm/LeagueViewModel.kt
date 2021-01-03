@@ -27,12 +27,12 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
             .asLiveData()
     }
     //TODO: AllApiFootball
-     suspend fun getTopScorers(leagueId: Int,ApiKey : String ) : LiveData<NetworkStatesHandler<TopScorersModl>>{
+    suspend fun getTopScorers(leagueId: Int,ApiKey : String ) : LiveData<NetworkStatesHandler<TopScorersModl>>{
         return repository.getTopScorers(leagueId,ApiKey)
             .buffer()
             .asLiveData()
     }
-      fun getSportApiTeamLogo(teamId : Int, ApiKey : String) : LiveData<NetworkStatesHandler<SportApiLogoModel>>{
+    fun getSportApiTeamLogo(teamId : Int, ApiKey : String) : LiveData<NetworkStatesHandler<SportApiLogoModel>>{
         return repository.getSportApiLogoTeam(teamId,ApiKey)
             .buffer()
             .asLiveData()
@@ -54,9 +54,9 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
 
     }
     suspend fun getAllTeams(id : Int) : LiveData<NetworkStatesHandler<NotificationModel>> {
-       return repository.getAllTeams(id)
-           .buffer()
-           .asLiveData()
+        return repository.getAllTeams(id)
+            .buffer()
+            .asLiveData()
 
     }
     fun getLiveScoreHomeLogoTest(id : Int) : LiveData<LiveScoreModelAway>{
@@ -68,15 +68,15 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
 
     }
     suspend fun getLiveScores() : LiveData<NetworkStatesHandler<v2livescores>> {
-          return repository.getLiveScores()
-              .buffer()
-              .asLiveData()
+        return repository.getLiveScores()
+            .buffer()
+            .asLiveData()
     }
     fun getLiveScoreHomeLogo(id : Int) : LiveData<LiveScoreModel>{
         return liveData(Dispatchers.IO){
-                val response  = repository.getLiveScoreHomeLogo(id)
-                emit(response)
-            }
+            val response  = repository.getLiveScoreHomeLogo(id)
+            emit(response)
+        }
     }
     suspend fun getStandingsTeamsDetails(id : Int) : LiveData<NetworkStatesHandler<StandingsTeamsDetailsModel>>{
         return repository.getStandingsTeamsDetails(id)
@@ -162,32 +162,32 @@ class LeagueViewModel @ViewModelInject constructor(private var repository: Leagu
             .asLiveData()
     }
 
-     fun deleteDuplicateMatches() {
+    fun deleteDuplicateMatches() {
         viewModelScope.launch {
             repository.deleteDuplicateMatches()
         }
     }
-     fun deleteDuplicateLiveScores() {
+    fun deleteDuplicateLiveScores() {
         viewModelScope.launch {
             repository.deleteDuplicateLiveScores()
         }
     }
-     fun deleteDuplicateNews() {
+    fun deleteDuplicateNews() {
         viewModelScope.launch {
             repository.deleteDuplicateNews()
         }
     }
-     fun deleteDuplicateBottomSheetStandings() {
+    fun deleteDuplicateBottomSheetStandings() {
         viewModelScope.launch {
             repository.deleteDuplicateBottomSheetStandings()
         }
     }
-     fun deleteDuplicateBestScorers() {
+    fun deleteDuplicateBestScorers() {
         viewModelScope.launch {
             repository.deleteDuplicateBestScorers()
         }
     }
-     fun deleteDuplicateStandings() {
+    fun deleteDuplicateStandings() {
         viewModelScope.launch {
             repository.deleteDuplicateStandings()
         }

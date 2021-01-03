@@ -3,12 +3,11 @@
     <data>
         <variable
             name="dateEvent"
-            type = "String" />
+            type ="String"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@android:color/holo_blue_dark"
-        android:layout_marginTop="3dp"
+        android:background="#665251"
         android:layout_height="50dp">
 
         <TextView
@@ -16,7 +15,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@{dateEvent}"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

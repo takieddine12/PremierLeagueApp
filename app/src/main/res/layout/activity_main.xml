@@ -10,22 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <com.google.android.material.appbar.MaterialToolbar
+
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bottomshapeallcorners"
-            android:id="@+id/toolbar" >
-
-            <TextView
-                android:id="@+id/toolbarTitle"
+            android:elevation="20dp">
+            <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:fontFamily="@font/andada"
-                android:textColor="@android:color/black"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-        </com.google.android.material.appbar.MaterialToolbar>
+                android:layout_height="55dp"
+                android:background="@android:color/white"
+                android:id="@+id/toolbar"
+                style="@style/AppTheme.AppBarOverlay"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
     </LinearLayout>
 
@@ -34,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
-        android:layout_marginTop="55dp" />
+        android:layout_marginTop="65dp" />
 
     <com.fxn.BubbleTabBar
         android:id="@+id/bubbleTabBar"

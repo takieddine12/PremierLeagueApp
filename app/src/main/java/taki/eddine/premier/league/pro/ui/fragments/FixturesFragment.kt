@@ -170,7 +170,7 @@ class FixturesFragment : Fragment() {
                                                                         )
                                                                     fixturesLayoutBinding.fixturesProgressBar.visibility =
                                                                         View.INVISIBLE
-                                                                   // leagueViewModel.insertFixtures(fixture)
+                                                                    // leagueViewModel.insertFixtures(fixture)
                                                                 }
 
                                                             })

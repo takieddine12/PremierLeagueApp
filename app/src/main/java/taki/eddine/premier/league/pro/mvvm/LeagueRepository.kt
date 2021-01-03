@@ -46,7 +46,7 @@ class LeagueRepository @Inject constructor(private var apiResponse: ApiResponse,
         }
     }
 
-     fun getSportApiLogoTeam(teamid : Int, Apikey  : String ) : Flow<NetworkStatesHandler<SportApiLogoModel>>{
+    fun getSportApiLogoTeam(teamid : Int, Apikey  : String ) : Flow<NetworkStatesHandler<SportApiLogoModel>>{
         return flow {
             try {
                 emit(handleSuccess(apiResponse2.getSportApiTeamLogo(teamid,Apikey)))
@@ -99,7 +99,7 @@ class LeagueRepository @Inject constructor(private var apiResponse: ApiResponse,
     suspend fun getAllTeams(id : Int)  : Flow<NetworkStatesHandler<NotificationModel>>{ // this one
         return flow {
             try {
-               emit(handleSuccess(apiResponse.getAllTeams(id)))
+                emit(handleSuccess(apiResponse.getAllTeams(id)))
             }catch (e : Exception){
                 emit(handleException(e))
             }
@@ -125,7 +125,7 @@ class LeagueRepository @Inject constructor(private var apiResponse: ApiResponse,
     suspend fun getLiveScoreHomeLogoTest(id : Int) = apiResponse.getLiveScoreHomeTeamLogoTest(id)
     suspend fun getStandingsTeamsDetails(id: Int)  : Flow<NetworkStatesHandler<StandingsTeamsDetailsModel>>{ // this one
         return flow {
-             try {
+            try {
                 emit(handleSuccess(apiResponse.getStandingsDetails(id)))
             }catch (e : Exception){
                 emit( handleException(e))

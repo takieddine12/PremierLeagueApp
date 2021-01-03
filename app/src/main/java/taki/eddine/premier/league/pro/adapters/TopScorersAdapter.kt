@@ -17,13 +17,13 @@ import taki.eddine.premier.league.pro.uilisteners.TopScorersListener
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TopScorersAdapter(var context: FragmentActivity, var result: MutableList<ResultMainModel>,
+class TopScorersAdapter(var result: MutableList<ResultMainModel>,
 var listener : TopScorersListener) : RecyclerView.Adapter<TopScorersAdapter.ViewHolder>() {
 
     class ViewHolder(var topScorersRowsLayoutBinding: TopscorersrowslayoutBinding) : RecyclerView.ViewHolder(topScorersRowsLayoutBinding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-       val binding = DataBindingUtil.inflate<TopscorersrowslayoutBinding>(LayoutInflater.from(context), R.layout.topscorersrowslayout,parent,false)
+       val binding = DataBindingUtil.inflate<TopscorersrowslayoutBinding>(LayoutInflater.from(parent.context), R.layout.topscorersrowslayout,parent,false)
         return ViewHolder(binding)
     }
 

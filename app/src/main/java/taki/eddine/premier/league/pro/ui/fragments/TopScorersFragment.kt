@@ -56,7 +56,7 @@ class TopScorersFragment : Fragment() {
 
         val prefs = requireContext().getSharedPreferences("bestScorersPrefs", Context.MODE_PRIVATE)
         val isFirstTime = prefs.getBoolean("firstTime", true)
-        if (isFirstTime and Constants.checkConnectivity(requireContext())) {
+        if (Constants.checkConnectivity(requireContext())) {
             getTopScorersData()
         } else if (!isFirstTime) {
             getOfflineData()
@@ -74,20 +74,17 @@ class TopScorersFragment : Fragment() {
         leagueViewModel.deleteDuplicateBestScorers()
         leagueViewModel.observeTopScorers().observe(viewLifecycleOwner, Observer { mainResult ->
 
-            mainResult.sortBy {
-                it.playerPlace?.toInt()
-            }
-            adapter= TopScorersAdapter(requireActivity(),mainResult, object : TopScorersListener {
+            mainResult.sortBy { it.playerPlace?.toInt()}
+
+            adapter= TopScorersAdapter(mainResult, object : TopScorersListener {
                 override fun topScorers(resultX: ResultMainModel) {
                     if(Constants.checkConnectivity(requireContext()) && !mainResult.isNullOrEmpty()){
                         Bundle().apply {
                             putString("playerName",resultX.playerName)
                             putString("icon", resultX.result?.teamLogo)
-
-                            val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
-                            topScorersBottomSheet.arguments  = this
+                            TopScorersDetailsBottomSheet().arguments  = this
                             if(Constants.dialogCounter == 0){
-                                topScorersBottomSheet.show(requireActivity().supportFragmentManager,topScorersBottomSheet.tag)
+                                TopScorersDetailsBottomSheet().show(requireActivity().supportFragmentManager,"tag")
                                 Constants.dialogCounter = 1
                             }
                         }
@@ -113,33 +110,41 @@ class TopScorersFragment : Fragment() {
                                     result.teamKey?.let {teamKey ->
                                         leagueViewModel.getSportApiTeamLogo(teamKey.toInt(),BuildConfig.TopScorersApi).observe(
                                             viewLifecycleOwner, Observer { netWorkResponse ->
-                                                netWorkResponse.data?.result?.map {  resultX ->
-                                                    val resultModel = ResultMainModel(result.goals,result.playerKey
-                                                        ,result.playerName,result.playerPlace,result.teamKey, result.teamName,resultX)
-                                                    list.add(resultModel)
-                                                    list.sortWith(compareBy { it.playerPlace?.toInt() })
-                                                    binding.topscorersrecycler.adapter = TopScorersAdapter(requireActivity(),list, object : TopScorersListener {
-                                                            override fun topScorers(resultX: ResultMainModel) {
-                                                                if(Constants.checkConnectivity(requireContext()) && !netWorkResponse.data.result.isNullOrEmpty()){
-                                                                    Bundle().apply {
+                                                if(!netWorkResponse.data?.result.isNullOrEmpty()){
+                                                    netWorkResponse.data?.result?.map {  resultX ->
+                                                        val resultModel = ResultMainModel(result.goals,
+                                                            result.playerKey
+                                                            ,result.playerName,
+                                                            result.playerPlace,result.teamKey,
+                                                            result.teamName,resultX)
 
-                                                                        putString("playerName",resultX.playerName)
-                                                                        putString("icon", resultX.result?.teamLogo)
-                                                                        val topScorersBottomSheet  = TopScorersDetailsBottomSheet()
-                                                                        topScorersBottomSheet.arguments  = this
-                                                                        if(Constants.dialogCounter == 0){
-                                                                            topScorersBottomSheet.show(requireActivity().supportFragmentManager,topScorersBottomSheet.tag)
-                                                                            Constants.dialogCounter = 1
-                                                                        }
+                                                        list.add(resultModel)
+                                                        list.sortWith(compareBy { it.playerPlace?.toInt() })
+
+                                                        binding.topscorersrecycler.adapter = TopScorersAdapter(list, object : TopScorersListener {
+                                                            override fun topScorers(resultX: ResultMainModel) {
+                                                                Bundle().apply {
+                                                                    putString("playerName",resultX.playerName)
+                                                                    putString("icon", resultX.result?.teamLogo)
+
+                                                                    Timber.d("PlayerName is ${resultX.playerName}")
+                                                                    Timber.d("Icon is ${resultX.result?.teamLogo}")
+
+                                                                    TopScorersDetailsBottomSheet().arguments = this
+                                                                    if(Constants.dialogCounter == 0){
+                                                                        TopScorersDetailsBottomSheet().show(parentFragmentManager,"tag")
+                                                                        Constants.dialogCounter = 1
                                                                     }
                                                                 }
                                                             }
                                                         })
-                                                     Intent(requireContext(),BestScorersService::class.java).apply {
-                                                         putExtra("bestScorersModel",result)
-                                                         requireContext().startService(this)
-                                                     }
+                                                        Intent(requireContext(),BestScorersService::class.java).apply {
+                                                            putExtra("bestScorersModel",result)
+                                                            requireContext().startService(this)
+                                                        }
+                                                    }
                                                 }
+
                                             }
                                         )
                                     }
