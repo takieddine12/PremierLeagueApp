@@ -116,9 +116,7 @@ class FixturesFragment : Fragment() {
                                 fixturesLayoutBinding.fixturesProgressBar.visibility = View.VISIBLE
                             }
                             NetworkStatesHandler.Status.SUCCESS -> {
-
-                                fixturesLayoutBinding.round.text =
-                                    getString(R.string.round).plus(-round)
+                                fixturesLayoutBinding.round.text = getString(R.string.round).plus(-round)
                                 it.data!!.events!!.map { event ->
                                     leagueViewModel.getLiveScoreHomeLogo(event.idHomeTeam!!.toInt())
                                         .observe(viewLifecycleOwner,

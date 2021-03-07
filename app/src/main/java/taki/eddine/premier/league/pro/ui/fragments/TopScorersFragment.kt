@@ -71,7 +71,7 @@ class TopScorersFragment : Fragment() {
     private fun getOfflineData(){
 
         leagueViewModel.observeTopScorers().observe(viewLifecycleOwner, Observer { mainResult ->
-            if(!mainResult.isNullOrEmpty()){
+            if(mainResult != null){
                 mainResult.sortBy { it.playerPlace?.toInt() }
                 adapter = TopScorersAdapter(mainResult, object : TopScorersListener {
                     override fun topScorers(resultX: ResultMainModel) {

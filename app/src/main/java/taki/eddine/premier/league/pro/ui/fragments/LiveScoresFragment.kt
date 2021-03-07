@@ -49,18 +49,12 @@ class LiveScoresFragment : Fragment() {
 
         mutableList = mutableListOf()
 
-
-        if(Constants.checkConnectivity(requireContext())){
-            getData()
-        } else  {
-            getSavedLiveScores()
-        }
-
+        getData()
     }
     private fun getSavedLiveScores() {
         leagueViewModel.deleteDuplicateLiveScores()
         leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer { eventTwo ->
-            if(eventTwo.isNullOrEmpty()){
+            if(eventTwo == null){
                 binding.liveScoresNoDataSvg.visibility = View.VISIBLE
                 binding.livescoreProgressbar.visibility = View.INVISIBLE
             }  else {

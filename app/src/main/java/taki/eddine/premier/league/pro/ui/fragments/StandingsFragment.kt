@@ -73,7 +73,7 @@ class StandingsFragment : Fragment() {
     private fun getOfflineData(){
         leagueViewModel.deleteDuplicateStandings()
         leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
-          if(!it.isNullOrEmpty()){
+          if(it != null){
               it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
               standingsAdapter = StandingsAdapter(requireActivity(), it)
               binding.standingsrecycler.adapter = standingsAdapter
