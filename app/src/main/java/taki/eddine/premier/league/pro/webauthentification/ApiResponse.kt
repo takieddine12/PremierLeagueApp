@@ -36,7 +36,7 @@ interface ApiResponse {
     suspend fun getNextFixtures(@Query("id") id : Int, @Query("r") round : Int , @Query("s") season : String) : FixturesModel
 
 
-    @GET("v1/json/1/lookuptable.php")
+    @GET("v1/json/1/lookuptable.php?")
     suspend fun getStandings(@Query("l") id : Int, @Query("s") seanson : String ) : StandingsModel
 
 

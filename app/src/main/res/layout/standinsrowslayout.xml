@@ -27,7 +27,7 @@
                 android:layout_marginStart="2dp"
                 android:fontFamily="@font/adamina"
                 android:gravity="center"
-                android:text="20"
+                android:text="@{String.valueOf(tablemodel.intRank)}"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
                 app:layout_constraintHorizontal_bias="0.384"
                 app:layout_constraintStart_toStartOf="@+id/guideline19"
                 app:layout_constraintTop_toTopOf="parent"
-                app:standingslogo="@{tablemodel.teamXX.homestrTeamBadge}" />
+                app:standingslogo="@{tablemodel.strTeamBadge}" />
 
 
             <TextView

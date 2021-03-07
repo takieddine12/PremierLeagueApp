@@ -25,7 +25,6 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.LivescoreslayoutBinding
 import taki.eddine.premier.league.pro.livescoresdata.EventTwo
 import taki.eddine.premier.league.pro.objects.UtilsClass
-import taki.eddine.premier.league.pro.services.LiveScoresService
 import timber.log.Timber
 
 
@@ -35,7 +34,6 @@ import timber.log.Timber
 class LiveScoresFragment : Fragment() {
 
     private lateinit var binding: LivescoreslayoutBinding
-
     private val leagueViewModel: LeagueViewModel by viewModels()
     private var mutableList: MutableList<EventTwo>? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,26 +49,17 @@ class LiveScoresFragment : Fragment() {
 
         mutableList = mutableListOf()
 
-        val prefs = requireContext().getSharedPreferences("LiveScoresPrefs", Context.MODE_PRIVATE)
-        val isFirstTime = prefs.getBoolean("firstTime",true)
+
         if(Constants.checkConnectivity(requireContext())){
             getData()
         } else  {
             getSavedLiveScores()
         }
 
-        val editor = prefs.edit()
-        editor.apply {
-            putBoolean("firstTime",false)
-            apply()
-        }
-
     }
     private fun getSavedLiveScores() {
         leagueViewModel.deleteDuplicateLiveScores()
         leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer { eventTwo ->
-
-
             if(eventTwo.isNullOrEmpty()){
                 binding.liveScoresNoDataSvg.visibility = View.VISIBLE
                 binding.livescoreProgressbar.visibility = View.INVISIBLE
@@ -96,10 +85,10 @@ class LiveScoresFragment : Fragment() {
                     }
                     NetworkStatesHandler.Status.SUCCESS -> {
                         binding.livescoreProgressbar.visibility = View.INVISIBLE
-                        if (it.data?.events != null) {
+                        if (it.data?.events != null && Constants.checkConnectivity(requireContext())) {
                             it.data.events.map { match ->
                                 binding.update.text = getString(R.string.updatedOn).plus(match.updated)
-                               // if (match.strLeague.equals("English Premier League")) {
+                                if (match.strLeague.equals("English Premier League")) {
                                     binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
                                     binding.fixturedate.text = UtilsClass.convertDate(match.dateEvent!!)
                                     val liveScores = EventTwo(
@@ -118,15 +107,19 @@ class LiveScoresFragment : Fragment() {
 
                                     mutableList?.add(liveScores)
                                     binding.livescoresrecycler.adapter = LiveScoresAdapter(requireActivity(), mutableList!!)
-                                     Intent(requireContext(),LiveScoresService::class.java).apply {
-                                         putExtra("liveScoresModel",liveScores)
-                                         requireContext().startService(this)
-                                     }
+
                                 }
-                        } else {
-                            getSavedLiveScores()
-                            binding.liveScoresNoDataSvg.visibility = View.VISIBLE
-                            binding.livescoreProgressbar.visibility = View.INVISIBLE
+                                else {
+                                        getSavedLiveScores()
+                                        binding.liveScoresNoDataSvg.visibility = View.VISIBLE
+                                        binding.livescoreProgressbar.visibility = View.INVISIBLE
+                                }
+                            } }
+                             else {
+                                getSavedLiveScores()
+                                binding.liveScoresNoDataSvg.visibility = View.VISIBLE
+                                binding.livescoreProgressbar.visibility = View.INVISIBLE
+
                         }
                     }
                     NetworkStatesHandler.Status.ERROR ->{

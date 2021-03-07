@@ -23,7 +23,6 @@ import taki.eddine.premier.league.pro.uilisteners.StandingsListener
 @InternalCoroutinesApi
 class StandingsAdapter(var context : FragmentActivity, private var mergedList : MutableList<Table>) : RecyclerView.Adapter<StandingsAdapter.StandingsViewHolder>() {
 
-    private var count = 1
     private  var leagueViewModel: LeagueViewModel = ViewModelProvider(context)[LeagueViewModel::class.java]
     class StandingsViewHolder(var binding : StandinsrowslayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -43,18 +42,15 @@ class StandingsAdapter(var context : FragmentActivity, private var mergedList : 
 
         checkingNulls(list)
 
-        if(count >= 20){
-            return
-        }
-        when(count) {
+        when(list.intRank) {
             1,2,3 -> {
-                holder.binding.ranking.text = "\uD83D\uDD3A ${count++}" + "."
+                holder.binding.ranking.text = "\uD83D\uDD3A ${list.intRank}" + "."
             }
             18,19,20 -> {
-                holder.binding.ranking.text = "\uD83D\uDD3B ${count++}" + "."
+                holder.binding.ranking.text = "\uD83D\uDD3B ${list.intRank}" + "."
             }
             else -> {
-                holder.binding.ranking.text = " ▶ ${  count++}" + "."
+                holder.binding.ranking.text = " ▶ ${list.intRank}" + "."
             }
         }
 
@@ -93,8 +89,7 @@ class StandingsAdapter(var context : FragmentActivity, private var mergedList : 
                 }
             }
         }
-
-    }
+       }
 
     }
     private fun checkingNulls(list : Table){

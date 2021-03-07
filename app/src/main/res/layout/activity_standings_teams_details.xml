@@ -99,9 +99,8 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline34"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <soup.neumorphism.NeumorphTextView
+            <TextView
                 android:id="@+id/staduimname"
-                style="@style/Widget.Neumorph.TextView"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -118,12 +117,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline36"
                 app:layout_constraintVertical_bias="0.0"
-                app:neumorph_shadowElevation="6dp"
-                app:neumorph_shapeType="basin" />
+                />
 
             <TextView
                 android:id="@+id/staduim_location"
-                style="@style/Widget.Neumorph.TextView"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="32dp"
@@ -139,13 +136,10 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline38"
                 app:layout_constraintTop_toTopOf="@+id/guideline36"
                 app:layout_constraintVertical_bias="0.0"
-                app:neumorph_shadowElevation="6dp"
-                app:neumorph_shapeType="basin"
                 tools:ignore="MissingPrefix" />
 
             <TextView
                 android:id="@+id/staduim_capacity"
-                style="@style/Widget.Neumorph.TextView"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="10dp"
@@ -162,8 +156,6 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline45"
                 app:layout_constraintTop_toTopOf="@+id/guideline36"
                 app:layout_constraintVertical_bias="0.0"
-                app:neumorph_shadowElevation="6dp"
-                app:neumorph_shapeType="basin"
                 tools:ignore="MissingPrefix" />
 
             <TextView

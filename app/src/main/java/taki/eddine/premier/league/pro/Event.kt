@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName
 
 data class Event(
     @SerializedName("dateEvent")
-    val dateEvent: String?,
+    val dateEvent: String? = null ,
     @SerializedName("intRound")
-    val intRound: String?,
+    val intRound: Int? = null ,
     @SerializedName("intHomeScore")
-    val intHomeScore : String?
+    val intHomeScore : String? = null
 
 )

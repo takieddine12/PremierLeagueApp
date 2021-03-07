@@ -7,13 +7,8 @@ import android.os.Bundle
 import android.os.PowerManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.TaskStackBuilder
-import androidx.datastore.preferences.core.clear
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.createDataStore
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.fxn.OnBubbleClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -105,48 +100,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentRound() {
         lifecycleScope.launch {
-            val fixturesPrefs = getSharedPreferences("fixturesPrefs", Context.MODE_PRIVATE)
-            val fixturesPrefsEditor = fixturesPrefs.edit()
-            if (Constants.checkConnectivity(this@MainActivity)) {
-                leagueViewModel.getCurrentRound(4328, "2020-2021")
-                    .observe(this@MainActivity, androidx.lifecycle.Observer {
-                        if (!it.events.isNullOrEmpty()) {
-                            val deviceDate = Calendar.getInstance().time
-                            val simpleDateFormat =
-                                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                            val formattedDate = simpleDateFormat.format(deviceDate)
-                            for (i in it.events.indices) {
-                                val gameDate = it.events[i].dateEvent
-                                if (gameDate.equals(formattedDate, true)) {
-                                    val currentRound = it.events[i].intRound?.toInt()
-                                    fixturesPrefsEditor.putInt("currentRound", currentRound!!)
-                                    fixturesPrefsEditor.apply()
-
-                                    /*
-                                    else {
-                                    val currentRound = it.events[i].intRound?.takeLast(i)?.toInt()
-                                    fixturesPrefsEditor.putInt("currentRound", currentRound!!)
-                                    fixturesPrefsEditor.apply()
-                                }
-                                     */
-                                }
-                            }
-                        } else {
-                            Timber.d("No Internet Connection")
-                        }
-                    })
-            }
-
-        }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        moveTaskToBack(true)
-    }
-}
- /*
-   private fun getCurrentRound()  { lifecycleScope.launch {
             val dataStore = createDataStore(name = "fixturesPrefs")
             if(Constants.checkConnectivity(this@MainActivity)){
                 leagueViewModel.getCurrentRound(4328, "2020-2021")
@@ -166,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                                 else if (!it.events[i].intHomeScore.isNullOrEmpty()) {
-                                    var currentRound = it.events[i].intRound?.takeLast(i)?.toInt()
+                                    val  currentRound = it.events[i].intRound
                                     CoroutineScope(Dispatchers.IO).launch {
                                         dataStore.edit {preferences ->
                                             preferences.clear()
@@ -181,5 +134,14 @@ class MainActivity : AppCompatActivity() {
                     })
             }
 
-        } }
-  */
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
+    }
+}
+
+
+

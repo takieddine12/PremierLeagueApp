@@ -3,6 +3,7 @@ package taki.eddine.premier.league.pro.ui.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.*
@@ -27,7 +28,6 @@ import taki.eddine.premier.league.pro.R
 import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.NewslayoutBinding
 import taki.eddine.premier.league.pro.models.NewsModel
-import taki.eddine.premier.league.pro.services.NewsService
 import taki.eddine.premier.league.pro.uilisteners.RssListener
 import java.io.IOException
 import java.io.InputStream
@@ -40,8 +40,6 @@ import java.nio.channels.InterruptedByTimeoutException
 @InternalCoroutinesApi
 @AndroidEntryPoint
 class NewsFragment : Fragment() {
-
-
     private val leagueViewModel: LeagueViewModel by viewModels()
     private var title: String? = null
     private var imageUrl: String? = null
@@ -67,15 +65,11 @@ class NewsFragment : Fragment() {
     @SuppressLint("CommitPrefEdits")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        val prefs  = requireContext().getSharedPreferences("news", Context.MODE_PRIVATE)
-
-        val isFirstTime = prefs.getBoolean("firstTime",true)
         if(Constants.checkConnectivity(requireContext())){
             CoroutineScope(Dispatchers.IO).launch {
                 getData()
             }
-        } else if(!isFirstTime ) {
+        } else{
             leagueViewModel.deleteDuplicateNews()
             leagueViewModel.observeNews().observe(viewLifecycleOwner, Observer {
                 newsAdapter = LeagueNewsAdapter(requireContext(), it, object : RssListener {
@@ -95,13 +89,6 @@ class NewsFragment : Fragment() {
                 binding.newsprogress.visibility = View.INVISIBLE
             })
         }
-
-        val editor = prefs.edit()
-        editor.apply {
-            putBoolean("firstTime",false)
-            apply()
-        }
-
 
     }
 
@@ -176,10 +163,7 @@ class NewsFragment : Fragment() {
                                     }
                                 }
                             })
-                            Intent(requireContext(),NewsService::class.java).apply {
-                                putExtra("newsModel",model)
-                                requireContext().startService(this)
-                            }
+
                         }
                     }
                 }

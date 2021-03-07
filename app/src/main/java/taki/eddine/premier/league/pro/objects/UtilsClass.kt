@@ -1,14 +1,14 @@
 package taki.eddine.premier.league.pro.objects
 
 import android.annotation.SuppressLint
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
 object UtilsClass {
 
-     val ROUND_PREFERENCES = preferencesKey<Int>("roundPrefs")
+     val ROUND_PREFERENCES = intPreferencesKey("roundPrefs")
 
     fun convertHour(strTime : String ) : String{
         val utcFormat = SimpleDateFormat("HH:mm", Locale.UK)

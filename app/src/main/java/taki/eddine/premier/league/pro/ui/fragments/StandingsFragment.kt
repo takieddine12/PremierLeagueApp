@@ -2,6 +2,7 @@ package taki.eddine.premier.league.pro.ui.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -29,8 +30,6 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.StandingslayoutBinding
 import taki.eddine.premier.league.pro.models.BottomStandingModel
 import taki.eddine.premier.league.pro.models.Table
-import taki.eddine.premier.league.pro.services.BottomSheetStandingsService
-import taki.eddine.premier.league.pro.services.StandingsService
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.net.URL
@@ -42,7 +41,7 @@ import javax.net.ssl.HttpsURLConnection
 @AndroidEntryPoint
 class StandingsFragment : Fragment() {
 
-
+    private lateinit var prefs : SharedPreferences
     private val leagueViewModel: LeagueViewModel by viewModels()
     private var mutableList: MutableList<Table>? = null
     private lateinit var binding: StandingslayoutBinding
@@ -62,89 +61,81 @@ class StandingsFragment : Fragment() {
 
         mutableList = mutableListOf()
 
-        val prefs = requireContext().getSharedPreferences("StandingsPrefs", Context.MODE_PRIVATE)
-        val isFirstTime = prefs.getBoolean("firstTime",true)
-
         if(Constants.checkConnectivity(requireContext())){
             getData()
         } else {
-            leagueViewModel.deleteDuplicateStandings()
-            leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
-                it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
-                standingsAdapter = StandingsAdapter(requireActivity(), it)
-                binding.standingsrecycler.adapter = standingsAdapter
-                binding.standingProgressbar.visibility = View.INVISIBLE
-            })
+
         }
 
-        prefs.edit {
-            putBoolean("firstTime",false)
-            apply()
-        }
+
         getClubsDetails()
+    }
+    private fun getOfflineData(){
+        leagueViewModel.deleteDuplicateStandings()
+        leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
+          if(!it.isNullOrEmpty()){
+              it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
+              standingsAdapter = StandingsAdapter(requireActivity(), it)
+              binding.standingsrecycler.adapter = standingsAdapter
+              binding.standingProgressbar.visibility = View.INVISIBLE
+          } else {
+              // No data in databse
+          }
+        })
     }
     private fun getData(){
         lifecycleScope.launch {
             leagueViewModel.getStandings(4328, "2020-2021")
                 .observe(viewLifecycleOwner, Observer {
-                    if (!it.data?.table.isNullOrEmpty()) {
-                        when (it.status) {
-                            NetworkStatesHandler.Status.LOADING -> {
-                                binding.standingProgressbar.visibility = View.VISIBLE
-                            }
-                            NetworkStatesHandler.Status.SUCCESS -> {
-                                it.data?.table?.map { table ->
-                                    table.teamid?.let { teamId ->
-                                        leagueViewModel.getLiveScoreHomeLogo(teamId.toInt())
-                                            .observe(
-                                                viewLifecycleOwner,
-                                                Observer {
-                                                    it.teams?.map { teamXX ->
-                                                        val standingTable = Table(
-                                                            table.draw,
-                                                            table.goalsAgainst,
-                                                            table.goalsDifference,
-                                                            table.goalsFor,
-                                                            table.loss,
-                                                            table.name,
-                                                            table.played,
-                                                            table.teamid,
-                                                            table.total,
-                                                            table.win,
-                                                            teamXX
-                                                        )
+                    when (it.status) {
+                        NetworkStatesHandler.Status.LOADING -> {
+                            binding.standingProgressbar.visibility = View.VISIBLE
+                        }
+                        NetworkStatesHandler.Status.SUCCESS -> {
+                            if (it.data?.table != null && Constants.checkConnectivity(requireContext())) {
+                                it.data!!.table!!.map { table ->
+                                    val standingTable = Table(
+                                        table.strForm,
+                                        table.strTeamBadge,
+                                        table.intRank,
+                                        table.draw,
+                                        table.goalsAgainst,
+                                        table.goalsDifference,
+                                        table.goalsFor,
+                                        table.loss,
+                                        table.name,
+                                        table.played,
+                                        table.teamid,
+                                        table.total,
+                                        table.win
+                                    )
 
+                                    mutableList?.add(standingTable)
+                                    mutableList?.sortWith(compareByDescending<Table> { it.total }
+                                        .thenByDescending { it.goalsDifference })
 
-                                                        mutableList?.add(standingTable)
-                                                        mutableList?.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
+                                    standingsAdapter =
+                                        StandingsAdapter(requireActivity(), mutableList!!)
+                                    binding.standingsrecycler.adapter = standingsAdapter
+                                    Timber.d("Adapter ItemCount ${standingsAdapter.itemCount}")
 
-                                                        standingsAdapter = StandingsAdapter(requireActivity(), mutableList!!)
-                                                        binding.standingsrecycler.adapter = standingsAdapter
-
-                                                        Intent(requireContext(),StandingsService::class.java).apply {
-                                                            putExtra("standingTable",table)
-                                                            requireContext().startService(this)
-                                                        }
-                                                    }
-                                                })
-                                    }
                                 }
-
                                 binding.standingProgressbar.visibility = View.INVISIBLE
+
                             }
-                            NetworkStatesHandler.Status.ERROR -> {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Something Went Wrong",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                binding.standingProgressbar.visibility =
-                                    View.INVISIBLE
+                            else {
+                                getOfflineData()
                             }
+                        }
+                        NetworkStatesHandler.Status.ERROR -> {
+                            getOfflineData()
+                            Toast.makeText(requireContext(), "Something Went Wrong", Toast.LENGTH_SHORT).show()
+                            binding.standingProgressbar.visibility = View.INVISIBLE
                         }
                     }
                 })
         }
+
     }
     private fun getClubsDetails()  {
         lifecycleScope.launch {
@@ -160,7 +151,7 @@ class StandingsFragment : Fragment() {
                                 it.data?.teams?.map { team ->
                                     val url = URL(team.strTeamBadge)
                                     val LogoUrl = URL(team.strStadiumThumb)
-                                    getTeamLogo(team.strTeam!!)
+                                 //   getTeamLogo(team.strTeam!!)
                                     try {
                                         Thread{
 
@@ -191,10 +182,10 @@ class StandingsFragment : Fragment() {
                                                     team.strStadiumLocation!!, team.intStadiumCapacity!!
                                                 )
 
-                                                Intent(requireContext(),BottomSheetStandingsService::class.java).apply {
-                                                    putExtra("bottomStandingModel",bottomStandingModel)
-                                                    requireContext().startService(this)
-                                                }
+//                                                Intent(requireContext(),BottomSheetStandingsService::class.java).apply {
+//                                                    putExtra("bottomStandingModel",bottomStandingModel)
+//                                                    requireContext().startService(this)
+//                                                }
                                             }
                                         }.start()
                                     }catch (e : Exception){
@@ -211,18 +202,18 @@ class StandingsFragment : Fragment() {
                 })
         }
     }
-    private fun getTeamLogo(team : String) : ByteArrayOutputStream {
-        val url = URL(team)
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        try {
-            Thread{
-
-            }.start()
-        }catch (e : Exception){
-            Timber.d("HttpUrlConnection Exception ${e.message}")
-        }
-        return byteArrayOutputStream
-    }
+//    private fun getTeamLogo(team : String) : ByteArrayOutputStream {
+//        val url = URL(team)
+//        val byteArrayOutputStream = ByteArrayOutputStream()
+//        try {
+//            Thread{
+//
+//            }.start()
+//        }catch (e : Exception){
+//            Timber.d("HttpUrlConnection Exception ${e.message}")
+//        }
+//        return byteArrayOutputStream
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

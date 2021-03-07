@@ -3,7 +3,7 @@ package taki.eddine.premier.league.pro
 import android.content.Context
 import android.net.ConnectivityManager
 import android.widget.Toast
-import androidx.datastore.preferences.core.preferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.lifecycle.LiveData
 
 object Constants {
@@ -11,7 +11,7 @@ object Constants {
      const val ALARM_REQUEST_CODE = 1001
      var dialogCounter = 0
      const val NOTIFICATION_TEAM_PICK = 3000
-     val ROUND_PREFERENCES = preferencesKey<Int>("roundPrefs")
+     val ROUND_PREFERENCES = intPreferencesKey("roundPrefs")
      const val wakeLockTag = "alarm:tag"
 
      //4013070

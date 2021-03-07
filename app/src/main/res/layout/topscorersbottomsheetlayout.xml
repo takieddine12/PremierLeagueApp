@@ -149,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <soup.neumorphism.NeumorphButton
+            <soup.neumorphism.NeumorphImageButton
                 style="@style/Widget.Neumorph.ImageButton"
                 android:layout_width="0dp"
                 android:layout_height="75dp"

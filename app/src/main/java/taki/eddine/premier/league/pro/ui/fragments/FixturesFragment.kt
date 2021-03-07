@@ -46,11 +46,7 @@ class FixturesFragment : Fragment() {
 
     private val leagueViewModel: LeagueViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fixturesLayoutBinding = FixtureslayoutBinding.inflate(layoutInflater, container, false)
         return fixturesLayoutBinding.root
     }
@@ -58,13 +54,10 @@ class FixturesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fixturesLayoutBinding.fixturesRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext())
+        fixturesLayoutBinding.fixturesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         fixturesLayoutBinding.fixturesRecyclerView.setHasFixedSize(true)
 
         groupedHashMap = linkedMapOf()
-
-
         fixturesMutableList = mutableListOf()
         listItem = mutableListOf()
 
@@ -89,10 +82,11 @@ class FixturesFragment : Fragment() {
                     }
                 })
             }
-        } else {
+        }
+        else {
             leagueViewModel.deleteDuplicateMatches()
             leagueViewModel.observeFixtures().observe(viewLifecycleOwner, Observer {
-                it?.let {
+                if(it != null){
                     fixturesMutableList = it
                     fixturesMutableList.sortBy { event -> event.strTime }
                     fixturesLayoutBinding.fixturesRecyclerView.adapter =
@@ -102,7 +96,10 @@ class FixturesFragment : Fragment() {
                         fixturesLayoutBinding.round.text =
                             getString(R.string.round).plus(" - ").plus(it.matchRound)
                     }
+                } else {
+                    // No data in database
                 }
+
             })
         }
 
@@ -119,6 +116,7 @@ class FixturesFragment : Fragment() {
                                 fixturesLayoutBinding.fixturesProgressBar.visibility = View.VISIBLE
                             }
                             NetworkStatesHandler.Status.SUCCESS -> {
+
                                 fixturesLayoutBinding.round.text =
                                     getString(R.string.round).plus(-round)
                                 it.data!!.events!!.map { event ->
@@ -160,9 +158,7 @@ class FixturesFragment : Fragment() {
                                                                     fixturesMutableList.sortedWith(
                                                                         compareBy { it.strTime })
 
-                                                                    handleGrouping(
-                                                                        fixturesMutableList
-                                                                    )
+                                                                    handleGrouping(fixturesMutableList)
                                                                     fixturesLayoutBinding.fixturesRecyclerView.adapter =
                                                                         FixturesAdapter(
                                                                             requireActivity(),
@@ -170,7 +166,7 @@ class FixturesFragment : Fragment() {
                                                                         )
                                                                     fixturesLayoutBinding.fixturesProgressBar.visibility =
                                                                         View.INVISIBLE
-                                                                    // leagueViewModel.insertFixtures(fixture)
+                                                                     leagueViewModel.insertFixtures(fixture)
                                                                 }
 
                                                             })
@@ -189,7 +185,6 @@ class FixturesFragment : Fragment() {
                 })
         }
     }
-
     private fun handleGrouping(fixturesMutableList: MutableList<Event>): MutableList<ListItem> {
         groupedHashMap = hashMapGroup(fixturesMutableList)
         listItem?.clear()
@@ -206,7 +201,6 @@ class FixturesFragment : Fragment() {
         }
         return listItem!!
     }
-
     private fun hashMapGroup(list: MutableList<Event>): LinkedHashMap<String, MutableList<Event>> {
         for (poJo in list) {
             val hashKey = poJo.dateEvent
@@ -220,17 +214,14 @@ class FixturesFragment : Fragment() {
         }
         return groupedHashMap!!
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu, menu)
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.refresh -> {

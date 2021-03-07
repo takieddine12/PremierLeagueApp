@@ -5,37 +5,48 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
+import org.jetbrains.annotations.NotNull
 
 
 @Entity(tableName = "standingTable")
 class Table(
 
-    @SerializedName("draw")
+    @SerializedName("strForm")
+    var strForm : String?,
+    @SerializedName("strTeamBadge")
+    var strTeamBadge : String?,
+    @SerializedName("intRank")
+    var intRank : Int?,
+    @SerializedName("intDraw")
     var draw: Int?,
-    @SerializedName("goalsagainst")
+    @SerializedName("intGoalsAgainst")
     val goalsAgainst: Int?,
-    @SerializedName("goalsdifference")
+    @SerializedName("intGoalDifference")
     var goalsDifference: Int,
-    @SerializedName("goalsfor")
+    @SerializedName("intGoalsFor")
     val goalsFor: Int?,
-    @SerializedName("loss")
+    @SerializedName("intLoss")
     var loss: Int?,
-    @SerializedName("name")
+    @SerializedName("strTeam")
     var name: String?,
-    @SerializedName("played")
+    @SerializedName("intPlayed")
     var played: Int?,
-    @SerializedName("teamid")
+    @SerializedName("idTeam")
     val teamid: String?,
-    @SerializedName("total")
+    @SerializedName("intPoints")
     var total: Int?,
-    @SerializedName("win")
-    var win: Int?,
-    @Embedded val teamXX: TeamXX? = null
-) : Parcelable{
+    @SerializedName("intWin")
+    var win: Int?
+) : Parcelable {
+
     @PrimaryKey(autoGenerate = true)
+    @NotNull
     var tableID : Int? = null
 
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readInt(),
@@ -45,13 +56,14 @@ class Table(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readParcelable(TeamXX::class.java.classLoader)
+        parcel.readValue(Int::class.java.classLoader) as? Int
     ) {
-        tableID = parcel.readValue(Int::class.java.classLoader) as? Int
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(strForm)
+        parcel.writeString(strTeamBadge)
+        parcel.writeValue(intRank)
         parcel.writeValue(draw)
         parcel.writeValue(goalsAgainst)
         parcel.writeInt(goalsDifference)
@@ -62,8 +74,6 @@ class Table(
         parcel.writeString(teamid)
         parcel.writeValue(total)
         parcel.writeValue(win)
-        parcel.writeParcelable(teamXX, flags)
-        parcel.writeValue(tableID)
     }
 
     override fun describeContents(): Int {
@@ -79,4 +89,5 @@ class Table(
             return arrayOfNulls(size)
         }
     }
+
 }

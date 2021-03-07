@@ -17,8 +17,8 @@ import taki.eddine.premier.league.pro.uilisteners.TopScorersListener
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
-class TopScorersAdapter(var result: MutableList<ResultMainModel>,
-var listener : TopScorersListener) : RecyclerView.Adapter<TopScorersAdapter.ViewHolder>() {
+class TopScorersAdapter(private var result: MutableList<ResultMainModel>,
+private var listener : TopScorersListener) : RecyclerView.Adapter<TopScorersAdapter.ViewHolder>() {
 
     class ViewHolder(var topScorersRowsLayoutBinding: TopscorersrowslayoutBinding) : RecyclerView.ViewHolder(topScorersRowsLayoutBinding.root)
 
@@ -28,15 +28,13 @@ var listener : TopScorersListener) : RecyclerView.Adapter<TopScorersAdapter.View
     }
 
 
-    override fun getItemCount(): Int {
-        return result.size.minus(101)
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val list = result[position]
-        holder.topScorersRowsLayoutBinding.apply {
-            model = list
-            listener = listener
-        }
+        holder.topScorersRowsLayoutBinding.model = list
+        holder.topScorersRowsLayoutBinding.listener = listener
+    }
+
+    override fun getItemCount(): Int {
+        return result.size
     }
 }
