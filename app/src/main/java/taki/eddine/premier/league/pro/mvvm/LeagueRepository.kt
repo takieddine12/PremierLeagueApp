@@ -148,7 +148,7 @@ class LeagueRepository @Inject constructor(private var apiResponse: ApiResponse,
     suspend fun insertFixtures(event: Event) = fixturesDao.insertFixtures(event)
     ///---------------LiveScores Room
     fun getSavedLiveScores() = liveScoresDao.getLiveScores()
-    suspend fun insertLiveScores(match: MutableList<EventTwo?>) = liveScoresDao.insertLiveScores(match)
+    suspend fun insertLiveScores(match: MutableList<EventTwo>) = liveScoresDao.insertLiveScores(match)
     ///----------------TopScorers Room
     fun getSavedTopScorers() = topScorersDao.getTopScorersFromDao()
     suspend fun insertTopScorers(result: ResultMainModel) = topScorersDao.insertTopScorers(result)

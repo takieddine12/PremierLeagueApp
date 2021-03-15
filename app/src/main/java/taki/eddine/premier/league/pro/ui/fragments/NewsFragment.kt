@@ -163,6 +163,7 @@ class NewsFragment : Fragment() {
                                     }
                                 }
                             })
+                            leagueViewModel.insertNews(model)
 
                         }
                     }

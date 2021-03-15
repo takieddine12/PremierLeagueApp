@@ -72,14 +72,17 @@ class StandingsFragment : Fragment() {
     }
     private fun getOfflineData(){
         leagueViewModel.deleteDuplicateStandings()
-        leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer {
-          if(it != null){
-              it.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
-              standingsAdapter = StandingsAdapter(requireActivity(), it)
+        leagueViewModel.observeStandings().observe(viewLifecycleOwner, Observer { list ->
+          if(list  != null &&  list.isNotEmpty()){
+              list.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
+              standingsAdapter = StandingsAdapter(requireActivity(), list)
               binding.standingsrecycler.adapter = standingsAdapter
               binding.standingProgressbar.visibility = View.INVISIBLE
           } else {
-              // No data in databse
+              list.sortWith(compareByDescending<Table> { it.total }.thenByDescending { it.goalsDifference })
+              standingsAdapter = StandingsAdapter(requireActivity(), list)
+              binding.standingsrecycler.adapter = standingsAdapter
+              binding.standingProgressbar.visibility = View.INVISIBLE
           }
         })
     }
@@ -92,8 +95,9 @@ class StandingsFragment : Fragment() {
                             binding.standingProgressbar.visibility = View.VISIBLE
                         }
                         NetworkStatesHandler.Status.SUCCESS -> {
-                            if (it.data?.table != null && Constants.checkConnectivity(requireContext())) {
-                                it.data.table!!.map { table ->
+                            val list = it.data?.table
+                            if (list != null && list.isNotEmpty() && Constants.checkConnectivity(requireContext())) {
+                                list.map { table ->
                                     val standingTable = Table(
                                         table.strForm,
                                         table.strTeamBadge,
@@ -114,10 +118,9 @@ class StandingsFragment : Fragment() {
                                     mutableList?.sortWith(compareByDescending<Table> { it.total }
                                         .thenByDescending { it.goalsDifference })
 
-                                    standingsAdapter =
-                                        StandingsAdapter(requireActivity(), mutableList!!)
+                                    standingsAdapter = StandingsAdapter(requireActivity(), mutableList!!)
                                     binding.standingsrecycler.adapter = standingsAdapter
-                                    Timber.d("Adapter ItemCount ${standingsAdapter.itemCount}")
+                                    leagueViewModel.insertTableStandings(table)
 
                                 }
                                 binding.standingProgressbar.visibility = View.INVISIBLE

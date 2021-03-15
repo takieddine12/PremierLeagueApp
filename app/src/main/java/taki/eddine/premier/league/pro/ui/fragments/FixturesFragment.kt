@@ -32,6 +32,7 @@ import taki.eddine.premier.league.pro.objects.UtilsClass.ROUND_PREFERENCES
 import taki.eddine.premier.league.pro.ui.viewtypes.DateItem
 import taki.eddine.premier.league.pro.ui.viewtypes.GeneralItem
 import taki.eddine.premier.league.pro.ui.viewtypes.ListItem
+import timber.log.Timber
 import kotlin.collections.LinkedHashMap
 
 
@@ -90,17 +91,16 @@ class FixturesFragment : Fragment() {
 
     private fun getOfflineData(){
         leagueViewModel.deleteDuplicateMatches()
-        leagueViewModel.observeFixtures().observe(viewLifecycleOwner, Observer {
-            if(it != null &&  Constants.checkConnectivity(requireContext())){
+        leagueViewModel.observeFixtures().observe(viewLifecycleOwner, Observer { list ->
+            if(list != null && list.isNotEmpty()){
                 fixturesLayoutBinding.noData.visibility = View.GONE
-                fixturesMutableList = it
+                fixturesMutableList = list
                 fixturesMutableList.sortBy { event -> event.strTime }
                 fixturesLayoutBinding.fixturesRecyclerView.adapter =
                     FixturesAdapter(requireActivity(), handleGrouping(fixturesMutableList))
                 fixturesLayoutBinding.fixturesProgressBar.visibility = View.INVISIBLE
-                it.map {
-                    fixturesLayoutBinding.round.text =
-                        getString(R.string.round).plus(" - ").plus(it.matchRound)
+                list.map {
+                    fixturesLayoutBinding.round.text = getString(R.string.round).plus(" - ").plus(it.matchRound)
                 }
             } else {
                 fixturesLayoutBinding.noData.visibility = View.VISIBLE
@@ -118,10 +118,11 @@ class FixturesFragment : Fragment() {
                                 fixturesLayoutBinding.fixturesProgressBar.visibility = View.VISIBLE
                             }
                             NetworkStatesHandler.Status.SUCCESS -> {
-                                if(it.data!!.events != null && checkConnectivity(requireContext()) ) {
+                                val list = it.data?.events
+                                if(list != null && list.isNotEmpty() && checkConnectivity(requireContext()) ) {
                                     fixturesLayoutBinding.noData.visibility = View.INVISIBLE
                                     fixturesLayoutBinding.round.text = getString(R.string.round).plus("-").plus(round)
-                                    it.data.events!!.map { event ->
+                                    list.map { event ->
                                         leagueViewModel.getLiveScoreHomeLogo(event.idHomeTeam!!.toInt())
                                             .observe(viewLifecycleOwner,
                                                 Observer {
@@ -161,15 +162,9 @@ class FixturesFragment : Fragment() {
                                                                             compareBy { it.strTime })
 
                                                                         handleGrouping(fixturesMutableList)
-                                                                        fixturesLayoutBinding.fixturesRecyclerView.adapter =
-                                                                            FixturesAdapter(
-                                                                                requireActivity(),
-                                                                                listItem!!
-                                                                            )
-                                                                        fixturesLayoutBinding.fixturesProgressBar.visibility =
-                                                                            View.INVISIBLE
-                                                                        leagueViewModel.insertFixtures(fixture)
-                                                                    }
+                                                                        fixturesLayoutBinding.fixturesRecyclerView.adapter = FixturesAdapter(requireActivity(), listItem!!)
+                                                                        fixturesLayoutBinding.fixturesProgressBar.visibility = View.INVISIBLE
+                                                                        leagueViewModel.insertFixtures(event)                                                                  }
 
                                                                 })
                                                     }

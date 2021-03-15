@@ -91,7 +91,6 @@ class TopScorersFragment : Fragment() {
         })
     }
     private fun getTopScorersData(){
-        ////--------------
         lifecycleScope.launch {
             leagueViewModel.getTopScorers(148, BuildConfig.TopScorersApi)
                 .observe(viewLifecycleOwner, Observer {
@@ -131,7 +130,7 @@ class TopScorersFragment : Fragment() {
                                                                     )
                                                                 }
                                                             })
-
+                                                            leagueViewModel.insertTopScorers(result)
                                                         }
                                                     }
                                                 }

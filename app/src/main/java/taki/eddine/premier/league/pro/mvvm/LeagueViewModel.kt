@@ -97,9 +97,9 @@ class LeagueViewModel
 
     ///Observing LiveScore DB
     fun observeLiveScores() = repository.getSavedLiveScores()
-    fun insertLiveScores(match: MutableList<EventTwo?>) {
+    fun insertLiveScores(match: MutableList<EventTwo>?) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertLiveScores(match)
+            repository.insertLiveScores(match!!)
         }
     }
 

@@ -11,9 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import maes.tech.intentanim.CustomIntent
 import taki.eddine.premier.league.pro.adapters.NotificationAdapter
 import taki.eddine.premier.league.pro.mvvm.LeagueViewModel
@@ -86,14 +84,17 @@ class TeamPickerActivity : AppCompatActivity() {
                                                             }
                                                         }
                                                          Intent(this@TeamPickerActivity, MainActivity::class.java).also {
-                                                             startActivity(it)
-                                                             CustomIntent.customType(this@TeamPickerActivity, "fadein-to-fadeout")
-                                                             getSharedPreferences("pickedPrefs", Context.MODE_PRIVATE).apply {
-                                                                 edit().apply {
-                                                                     putBoolean("firstStart", false)
-                                                                     apply()
-                                                                 }
-                                                             }
+                                                            CoroutineScope(Dispatchers.Main).launch {
+                                                                delay(2500)
+                                                                startActivity(it)
+                                                                CustomIntent.customType(this@TeamPickerActivity, "fadein-to-fadeout")
+                                                                getSharedPreferences("pickedPrefs", Context.MODE_PRIVATE).apply {
+                                                                    edit().apply {
+                                                                        putBoolean("firstStart", false)
+                                                                        apply()
+                                                                    }
+                                                                }
+                                                            }
                                                          }
                                                     }
                                                 })

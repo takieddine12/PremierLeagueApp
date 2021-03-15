@@ -14,7 +14,7 @@ interface LiveScoresDao {
     fun getLiveScores() : LiveData<MutableList<EventTwo>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLiveScores(match: kotlin.collections.MutableList<taki.eddine.premier.league.pro.livescoresdata.EventTwo?>)
+    suspend fun insertLiveScores(match: kotlin.collections.MutableList<taki.eddine.premier.league.pro.livescoresdata.EventTwo>)
 
     @Query("DELETE FROM liveScoresTable  WHERE matchID NOT IN (SELECT MIN(matchID) FROM liveScoresTable GROUP BY strHomeTeam, strAwayTeam)")
     suspend fun deleteDuplicateLiveScores()

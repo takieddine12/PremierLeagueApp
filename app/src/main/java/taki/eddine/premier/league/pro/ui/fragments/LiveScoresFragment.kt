@@ -1,7 +1,6 @@
 package taki.eddine.premier.league.pro.ui.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -25,7 +24,6 @@ import taki.eddine.premier.league.pro.showToast
 import taki.eddine.premier.league.pro.databinding.LivescoreslayoutBinding
 import taki.eddine.premier.league.pro.livescoresdata.EventTwo
 import taki.eddine.premier.league.pro.objects.UtilsClass
-import timber.log.Timber
 
 
 @ExperimentalCoroutinesApi
@@ -83,7 +81,9 @@ class LiveScoresFragment : Fragment() {
                         binding.livescoreProgressbar.visibility = View.INVISIBLE
                         if (list != null && list.isNotEmpty() && Constants.checkConnectivity(requireContext())) {
                            list.map { match ->
-                                if (match.strLeague.equals("English Premier League")) {
+                                if (match.strLeague.equals("Indian I-League")) {
+                                    binding.noData.visibility = View.GONE
+                                    binding.noDataText.visibility = View.GONE
                                     binding.update.text = getString(R.string.updatedOn).plus(match.updated)
                                     binding.fixturedate.text = UtilsClass.convertDate(match.dateEvent!!)
                                     val liveScores = EventTwo(
@@ -102,15 +102,14 @@ class LiveScoresFragment : Fragment() {
 
                                     mutableList?.add(liveScores)
                                     binding.livescoresrecycler.adapter = LiveScoresAdapter(requireActivity(), mutableList!!)
-
+                                    leagueViewModel.insertLiveScores(match = mutableList)
                                 }
                                 else {
-                                    Timber.d("Code Executed Here..")
-                                    binding.noData.visibility = View.VISIBLE
                                     binding.livescoreProgressbar.visibility = View.INVISIBLE
                                     getSavedLiveScores()
                                 }
-                            } }
+                            }
+                    }
                              else {
                                 binding.livescoreProgressbar.visibility = View.INVISIBLE
                                 getSavedLiveScores()
