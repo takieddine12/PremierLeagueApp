@@ -39,14 +39,10 @@ class TopScorersDetailsBottomSheet : BottomSheetDialogFragment() {
             val  playerName = arguments?.getString("playerName")?.replace(".","")
             val icon = arguments?.getString("icon")
 
-            Timber.d("Dialog PlayerName is $playerName")
-            Timber.d("Diallog Icon is $icon")
             lifecycleScope.launch {
                 leagueViewModel.getPlayerDetails(playerName!!,BuildConfig.TopScorersApi).observe(viewLifecycleOwner, Observer {
                     when(it.status){
-                        NetworkStatesHandler.Status.LOADING ->{
-
-                        }
+                        NetworkStatesHandler.Status.LOADING ->{ }
                         NetworkStatesHandler.Status.SUCCESS ->{
                             it.data?.result?.map { result ->
                                 //TODO : Set Up Views With Data

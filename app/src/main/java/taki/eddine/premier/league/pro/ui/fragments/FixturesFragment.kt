@@ -13,8 +13,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_offline_news.*
 import kotlinx.coroutines.*
 import maes.tech.intentanim.CustomIntent
+import taki.eddine.premier.league.pro.Constants
 import taki.eddine.premier.league.pro.adapters.FixturesAdapter
 import taki.eddine.premier.league.pro.ui.appui.ActivitySettings
 import taki.eddine.premier.league.pro.Constants.checkConnectivity
@@ -83,103 +85,107 @@ class FixturesFragment : Fragment() {
                 })
             }
         }
-        else {
-            leagueViewModel.deleteDuplicateMatches()
-            leagueViewModel.observeFixtures().observe(viewLifecycleOwner, Observer {
-                if(it != null){
-                    fixturesMutableList = it
-                    fixturesMutableList.sortBy { event -> event.strTime }
-                    fixturesLayoutBinding.fixturesRecyclerView.adapter =
-                        FixturesAdapter(requireActivity(), handleGrouping(fixturesMutableList))
-                    fixturesLayoutBinding.fixturesProgressBar.visibility = View.INVISIBLE
-                    it.map {
-                        fixturesLayoutBinding.round.text =
-                            getString(R.string.round).plus(" - ").plus(it.matchRound)
-                    }
-                } else {
-                    // No data in database
-                }
-
-            })
-        }
 
     }
 
+    private fun getOfflineData(){
+        leagueViewModel.deleteDuplicateMatches()
+        leagueViewModel.observeFixtures().observe(viewLifecycleOwner, Observer {
+            if(it != null &&  Constants.checkConnectivity(requireContext())){
+                fixturesLayoutBinding.noData.visibility = View.GONE
+                fixturesMutableList = it
+                fixturesMutableList.sortBy { event -> event.strTime }
+                fixturesLayoutBinding.fixturesRecyclerView.adapter =
+                    FixturesAdapter(requireActivity(), handleGrouping(fixturesMutableList))
+                fixturesLayoutBinding.fixturesProgressBar.visibility = View.INVISIBLE
+                it.map {
+                    fixturesLayoutBinding.round.text =
+                        getString(R.string.round).plus(" - ").plus(it.matchRound)
+                }
+            } else {
+                fixturesLayoutBinding.noData.visibility = View.VISIBLE
+            }
+
+        })
+    }
     private fun scrollToRound(round: Int) {
         groupedHashMap?.clear()
         lifecycleScope.launch {
             leagueViewModel.getNextLeagueFixtures(4328, round, "2020-2021")
                 .observe(viewLifecycleOwner, Observer {
-                    if (!it.data?.events.isNullOrEmpty()) {
                         when (it.status) {
                             NetworkStatesHandler.Status.LOADING -> {
                                 fixturesLayoutBinding.fixturesProgressBar.visibility = View.VISIBLE
                             }
                             NetworkStatesHandler.Status.SUCCESS -> {
-                                fixturesLayoutBinding.round.text = getString(R.string.round).plus(-round)
-                                it.data!!.events!!.map { event ->
-                                    leagueViewModel.getLiveScoreHomeLogo(event.idHomeTeam!!.toInt())
-                                        .observe(viewLifecycleOwner,
-                                            Observer {
-                                                it.teams!!.map { HomeLogoUrl ->
-                                                    leagueViewModel.getLiveScoreHomeLogoTest(event.idAwayTeam!!.toInt())
-                                                        .observe(viewLifecycleOwner,
-                                                            Observer { AwayLogoUrl ->
-                                                                AwayLogoUrl.teams!!.map {
-                                                                    val fixture = Event(
-                                                                        HomeLogoUrl,
-                                                                        it,
-                                                                        event.idAwayTeam,
-                                                                        event.idEvent,
-                                                                        event.idHomeTeam,
-                                                                        event.intAwayScore,
-                                                                        event.intHomeScore,
-                                                                        event.intRound,
-                                                                        event.strAwayGoalDetails,
-                                                                        event.strAwayRedCards,
-                                                                        event.strAwayTeam,
-                                                                        event.strAwayYellowCards,
-                                                                        event.strHomeGoalDetails,
-                                                                        event.strHomeRedCards,
-                                                                        event.strHomeTeam,
-                                                                        event.strHomeYellowCards,
-                                                                        UtilsClass.convertDate(event.dateEvent!!),
-                                                                        UtilsClass.convertHour(event.strTime!!),
-                                                                        event.strPostponed
-                                                                    )
-                                                                    fixture.matchRound = round
-
-                                                                    fixturesMutableList.clear()
-                                                                    fixturesMutableList.add(fixture)
-
-
-                                                                    fixturesMutableList.sortedWith(
-                                                                        compareBy { it.strTime })
-
-                                                                    handleGrouping(fixturesMutableList)
-                                                                    fixturesLayoutBinding.fixturesRecyclerView.adapter =
-                                                                        FixturesAdapter(
-                                                                            requireActivity(),
-                                                                            listItem!!
+                                if(it.data!!.events != null && checkConnectivity(requireContext()) ) {
+                                    fixturesLayoutBinding.noData.visibility = View.INVISIBLE
+                                    fixturesLayoutBinding.round.text = getString(R.string.round).plus("-").plus(round)
+                                    it.data.events!!.map { event ->
+                                        leagueViewModel.getLiveScoreHomeLogo(event.idHomeTeam!!.toInt())
+                                            .observe(viewLifecycleOwner,
+                                                Observer {
+                                                    it.teams!!.map { HomeLogoUrl ->
+                                                        leagueViewModel.getLiveScoreHomeLogoTest(event.idAwayTeam!!.toInt())
+                                                            .observe(viewLifecycleOwner,
+                                                                Observer { AwayLogoUrl ->
+                                                                    AwayLogoUrl.teams!!.map {
+                                                                        val fixture = Event(
+                                                                            HomeLogoUrl,
+                                                                            it,
+                                                                            event.idAwayTeam,
+                                                                            event.idEvent,
+                                                                            event.idHomeTeam,
+                                                                            event.intAwayScore,
+                                                                            event.intHomeScore,
+                                                                            event.intRound,
+                                                                            event.strAwayGoalDetails,
+                                                                            event.strAwayRedCards,
+                                                                            event.strAwayTeam,
+                                                                            event.strAwayYellowCards,
+                                                                            event.strHomeGoalDetails,
+                                                                            event.strHomeRedCards,
+                                                                            event.strHomeTeam,
+                                                                            event.strHomeYellowCards,
+                                                                            UtilsClass.convertDate(event.dateEvent!!),
+                                                                            UtilsClass.convertHour(event.strTime!!),
+                                                                            event.strPostponed
                                                                         )
-                                                                    fixturesLayoutBinding.fixturesProgressBar.visibility =
-                                                                        View.INVISIBLE
-                                                                     leagueViewModel.insertFixtures(fixture)
-                                                                }
+                                                                        fixture.matchRound = round
 
-                                                            })
-                                                }
-                                            })
+                                                                        fixturesMutableList.clear()
+                                                                        fixturesMutableList.add(fixture)
+
+
+                                                                        fixturesMutableList.sortedWith(
+                                                                            compareBy { it.strTime })
+
+                                                                        handleGrouping(fixturesMutableList)
+                                                                        fixturesLayoutBinding.fixturesRecyclerView.adapter =
+                                                                            FixturesAdapter(
+                                                                                requireActivity(),
+                                                                                listItem!!
+                                                                            )
+                                                                        fixturesLayoutBinding.fixturesProgressBar.visibility =
+                                                                            View.INVISIBLE
+                                                                        leagueViewModel.insertFixtures(fixture)
+                                                                    }
+
+                                                                })
+                                                    }
+                                                })
+                                    }
                                 }
-
+                                else {
+                                   getOfflineData()
+                                }
 
                             }
                             NetworkStatesHandler.Status.ERROR -> {
-                                fixturesLayoutBinding.fixturesProgressBar.visibility =
-                                    View.INVISIBLE
+                                fixturesLayoutBinding.fixturesProgressBar.visibility = View.INVISIBLE
+                                getOfflineData()
                             }
                         }
-                    }
                 })
         }
     }

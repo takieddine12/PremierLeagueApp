@@ -44,13 +44,14 @@ class StandingsAdapter(var context : FragmentActivity, private var mergedList : 
 
         when(list.intRank) {
             1,2,3 -> {
-                holder.binding.ranking.text = "\uD83D\uDD3A ${list.intRank}" + "."
+                holder.binding.ranking.text = StringBuilder().append(" ").append(list.intRank.toString()).append(" ").append("\uD83D\uDD3A").toString()
             }
             18,19,20 -> {
-                holder.binding.ranking.text = "\uD83D\uDD3B ${list.intRank}" + "."
+                holder.binding.ranking.text = java.lang.StringBuilder().append(" ").append(list.intRank.toString()).append(" ").append("\uD83D\uDD3B").toString()
             }
             else -> {
-                holder.binding.ranking.text = " ▶ ${list.intRank}" + "."
+                holder.binding.ranking.text = java.lang.StringBuilder().append(" ").append(list.intRank.toString()).append(" ").append("▶").toString()
+
             }
         }
 
@@ -92,7 +93,9 @@ class StandingsAdapter(var context : FragmentActivity, private var mergedList : 
        }
 
     }
-    private fun checkingNulls(list : Table){
+
+
+private fun checkingNulls(list : Table){
         if(list.name == null){
             list.name = "."
         }

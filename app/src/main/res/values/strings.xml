@@ -47,4 +47,5 @@
         <string name="standingsInstructions">Standings Classification</string>
         <string name="nointernet">No Internet..</string>
         <string name="updatedOn">Updated On:</string>
+    <string name="no_live_scores">No Live Scores</string>
 </resources>

@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -59,14 +58,28 @@
         android:visibility="visible"
         android:layout_gravity="center"/>
     <ImageView
+        android:id="@+id/noData"
         android:layout_width="match_parent"
-        android:layout_height="290dp"
-        android:id="@+id/liveScoresNoDataSvg"
-        android:visibility="invisible"
+        android:layout_height="160dp"
+        android:src="@drawable/ic_nodata"
+        android:visibility="visible"
         android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"/>
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"/>
 
-
+    <TextView
+        android:id="@+id/noDataText"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="250dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/numans"
+        android:visibility="gone"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:textSize="12sp"
+        android:textColor="@android:color/black"
+        android:text="@string/no_live_scores"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

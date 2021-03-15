@@ -39,16 +39,10 @@ class TopScorersFragment : Fragment() {
     private lateinit var list : MutableList<ResultMainModel>
     private lateinit var adapter : TopScorersAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = TopscorerslayoutBinding.inflate(inflater, container, false)
-
         return binding.root
     }
-
     @SuppressLint("CommitPrefEdits")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,42 +53,38 @@ class TopScorersFragment : Fragment() {
 
         list = mutableListOf()
      
-        if (Constants.checkConnectivity(requireContext())) {
-            getTopScorersData()
-        } else {
-            leagueViewModel.deleteDuplicateBestScorers()
-            getOfflineData()
-        }
-
+        getTopScorersData()
     }
 
     private fun getOfflineData(){
 
         leagueViewModel.observeTopScorers().observe(viewLifecycleOwner, Observer { mainResult ->
             if(mainResult != null){
+                binding.topscorersprogress.visibility = View.INVISIBLE
+                binding.noData.visibility = View.INVISIBLE
                 mainResult.sortBy { it.playerPlace?.toInt() }
                 adapter = TopScorersAdapter(mainResult, object : TopScorersListener {
                     override fun topScorers(resultX: ResultMainModel) {
-                        if (Constants.checkConnectivity(requireContext()) && !mainResult.isNullOrEmpty()) {
-                            Bundle().apply {
-                                putString("playerName", resultX.playerName)
-                                putString("icon", resultX.result?.teamLogo)
-                                TopScorersDetailsBottomSheet().arguments = this
-                                if (Constants.dialogCounter == 0) {
-                                    TopScorersDetailsBottomSheet().show(
-                                        requireActivity().supportFragmentManager,
-                                        "tag"
-                                    )
-                                    Constants.dialogCounter = 1
-                                }
+                        binding.noData.visibility = View.INVISIBLE
+                        Bundle().apply {
+                            putString("playerName", resultX.playerName)
+                            putString("icon", resultX.result?.teamLogo)
+                            TopScorersDetailsBottomSheet().arguments = this
+                            if (Constants.dialogCounter == 0) {
+                                TopScorersDetailsBottomSheet().show(
+                                    requireActivity().supportFragmentManager,
+                                    "tag"
+                                )
+                                Constants.dialogCounter = 1
                             }
                         }
                     }
                 })
                 binding.topscorersrecycler.adapter = adapter
-                binding.topscorersprogress.visibility = View.INVISIBLE
             } else {
-               // No Data in database
+                binding.topscorersprogress.visibility = View.INVISIBLE
+                binding.noData.visibility = View.VISIBLE
+
             }
 
 
@@ -112,6 +102,7 @@ class TopScorersFragment : Fragment() {
                             }
                             NetworkStatesHandler.Status.SUCCESS -> {
                                 if(it.data!!.result != null && Constants.checkConnectivity(requireContext())){
+                                    binding.noData.visibility = View.INVISIBLE
                                     it.data.result?.map { result ->
                                         result.teamKey?.let { teamKey ->
                                             leagueViewModel.getSportApiTeamLogo(teamKey.toInt(), BuildConfig.TopScorersApi).observe(
@@ -148,14 +139,15 @@ class TopScorersFragment : Fragment() {
                                         }
                                     }
                                     binding.topscorersprogress.visibility = View.INVISIBLE
-                                } else {
+                                }
+                                else {
                                     getOfflineData()
                                 }
 
                             }
                             NetworkStatesHandler.Status.ERROR -> {
-                                getOfflineData()
                                 binding.topscorersprogress.visibility = View.INVISIBLE
+                                getOfflineData()
                             }
                         }
                     } else {

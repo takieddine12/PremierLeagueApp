@@ -37,7 +37,7 @@ class LiveScoresFragment : Fragment() {
     private val leagueViewModel: LeagueViewModel by viewModels()
     private var mutableList: MutableList<EventTwo>? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = LivescoreslayoutBinding.inflate(layoutInflater)
+        binding = LivescoreslayoutBinding.inflate(layoutInflater,container,false)
         return binding.root
     }
     @SuppressLint("CommitPrefEdits")
@@ -53,20 +53,21 @@ class LiveScoresFragment : Fragment() {
     }
     private fun getSavedLiveScores() {
         leagueViewModel.deleteDuplicateLiveScores()
-        leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer { eventTwo ->
-            if(eventTwo == null){
-                binding.liveScoresNoDataSvg.visibility = View.VISIBLE
-                binding.livescoreProgressbar.visibility = View.INVISIBLE
-            }  else {
-                binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
-                binding.livescoreProgressbar.visibility = View.INVISIBLE
-                eventTwo.map {
+        leagueViewModel.observeLiveScores().observe(viewLifecycleOwner, Observer { list ->
+            if(list != null && list.isNotEmpty()){
+                binding.noData.visibility = View.GONE
+                binding.noDataText.visibility = View.GONE
+                list.map {
                     binding.fixturedate.text = it.dateEvent
                     binding.update.text = getString(R.string.updatedOn).plus(it.updated)
                 }
-                binding.livescoresrecycler.adapter = LiveScoresAdapter(requireContext(),eventTwo)
-
+                binding.livescoresrecycler.adapter = LiveScoresAdapter(requireContext(),list)
+            } else {
+                binding.noData.visibility = View.VISIBLE
+                binding.noDataText.visibility = View.VISIBLE
+                binding.livescoresrecycler.adapter = LiveScoresAdapter(requireContext(),list)
             }
+
         })
     }
     private fun getData() {
@@ -78,12 +79,12 @@ class LiveScoresFragment : Fragment() {
                         binding.livescoreProgressbar.visibility = View.VISIBLE
                     }
                     NetworkStatesHandler.Status.SUCCESS -> {
+                        val list = it.data?.events
                         binding.livescoreProgressbar.visibility = View.INVISIBLE
-                        if (it.data?.events != null && Constants.checkConnectivity(requireContext())) {
-                            it.data.events.map { match ->
-                                binding.update.text = getString(R.string.updatedOn).plus(match.updated)
+                        if (list != null && list.isNotEmpty() && Constants.checkConnectivity(requireContext())) {
+                           list.map { match ->
                                 if (match.strLeague.equals("English Premier League")) {
-                                    binding.liveScoresNoDataSvg.visibility = View.INVISIBLE
+                                    binding.update.text = getString(R.string.updatedOn).plus(match.updated)
                                     binding.fixturedate.text = UtilsClass.convertDate(match.dateEvent!!)
                                     val liveScores = EventTwo(
                                         match.strHomeTeam,
@@ -104,15 +105,15 @@ class LiveScoresFragment : Fragment() {
 
                                 }
                                 else {
-                                        getSavedLiveScores()
-                                        binding.liveScoresNoDataSvg.visibility = View.VISIBLE
-                                        binding.livescoreProgressbar.visibility = View.INVISIBLE
+                                    Timber.d("Code Executed Here..")
+                                    binding.noData.visibility = View.VISIBLE
+                                    binding.livescoreProgressbar.visibility = View.INVISIBLE
+                                    getSavedLiveScores()
                                 }
                             } }
                              else {
-                                getSavedLiveScores()
-                                binding.liveScoresNoDataSvg.visibility = View.VISIBLE
                                 binding.livescoreProgressbar.visibility = View.INVISIBLE
+                                getSavedLiveScores()
 
                         }
                     }

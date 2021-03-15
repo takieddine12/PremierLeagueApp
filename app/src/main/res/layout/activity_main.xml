@@ -37,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:elevation="16dp"
+        app:bubbletab_custom_font="@font/numans"
         app:bubbletab_disabled_icon_color="@android:color/white"
         android:background="@drawable/bottomshapeallcornersbottom"
         android:layout_gravity="bottom"

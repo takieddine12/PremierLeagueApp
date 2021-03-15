@@ -93,7 +93,7 @@ class StandingsFragment : Fragment() {
                         }
                         NetworkStatesHandler.Status.SUCCESS -> {
                             if (it.data?.table != null && Constants.checkConnectivity(requireContext())) {
-                                it.data!!.table!!.map { table ->
+                                it.data.table!!.map { table ->
                                     val standingTable = Table(
                                         table.strForm,
                                         table.strTeamBadge,
@@ -128,9 +128,8 @@ class StandingsFragment : Fragment() {
                             }
                         }
                         NetworkStatesHandler.Status.ERROR -> {
-                            getOfflineData()
-                            Toast.makeText(requireContext(), "Something Went Wrong", Toast.LENGTH_SHORT).show()
                             binding.standingProgressbar.visibility = View.INVISIBLE
+                            getOfflineData()
                         }
                     }
                 })

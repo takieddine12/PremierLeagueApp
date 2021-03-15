@@ -23,11 +23,10 @@
             <TextView
                 android:id="@+id/ranking"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:fontFamily="@font/adamina"
                 android:gravity="center"
-                android:text="@{String.valueOf(tablemodel.intRank)}"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
